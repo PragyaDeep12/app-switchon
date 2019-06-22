@@ -1,10 +1,10 @@
 import { CREATE_USER, UPDATE_USER, LOGIN_USER } from "../AppConstants";
+import { socket } from "../Dao/SocketDAO";
 
 export function createUser(user, password) {
-  
   console.log(password);
+  socket.emit("addNewUser", { user: user, password: password });
   return {
-    type: CREATE_USER,
     payload: { loginInfo: { user: user } }
   };
 }
@@ -12,7 +12,6 @@ export function createUser(user, password) {
 export function updateUser(newUser) {
   console.log("in the update user action");
   return {
-    type: UPDATE_USER,
     payload: {
       loginInfo: { user: newUser }
     }
@@ -21,7 +20,6 @@ export function updateUser(newUser) {
 export function loginUser(email, password) {
   console.log("in the login user action", email, password);
   return {
-    type: LOGIN_USER,
     payload: {
       loginInfo: {
         isLoggedIn: true

@@ -8,10 +8,11 @@ import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import userReducer from "./Reducer/UserReducer";
 import requestReducer from "./Reducer/RequestsReducer";
+window.devToolsExtension && window.devToolsExtension();
 
 // const allReducers = combineReducers({
 //   requests: requestReducer,
-//   user: userReducer
+//   loginInfo: userReducer
 // });
 // const store = createStore(
 //   allReducers,
@@ -20,14 +21,9 @@ import requestReducer from "./Reducer/RequestsReducer";
 //       { message: "first-message", fromUser: "Pragya", toUser: "Honey" },
 //       { message: "first-message", fromUser: "Pragya", toUser: "Honey" }
 //     ],
-//     user: {
-//       name: "Pragya",
-//       userName: "xxx",
-//       emailId: "pragya.deep19@gmail.com"
-//     }
+//     loginInfo: { isLoggedIm: null }
 //   },
-//   window.devToolsExtension && window.devToolsExtension()
-// );
+
 // const createUserAction = {
 //   type: "createUser",
 //   payload: {

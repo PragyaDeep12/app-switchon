@@ -1,21 +1,31 @@
 import { CREATE_USER, UPDATE_USER, LOGIN_USER } from "../AppConstants";
-import { createUser } from "../Actions/UserActions";
+import { createUser, updateUser, loginUser } from "../Actions/UserActions";
 
 export default function userReducer(state: any, actions: any) {
   switch (actions.type) {
     case CREATE_USER:
-      console.log(actions);
-      return createUser(actions.user, actions.password);
+      //console.log(actions);
+      {
+        var value = createUser(actions.user);
+        console.log(value);
+        state = value;
+        console.log(state);
+        return state;
+      }
       break;
     case UPDATE_USER:
-      return actions.payload.loginInfo;
+      {
+        var va = updateUser(actions.user);
+        console.log(value);
+        console.log(state);
+        return va;
+      }
+
       break;
     case LOGIN_USER:
-      return actions.payload.loginInfo;
+      return loginUser();
       break;
     default:
-      return state;
+      return {};
   }
-
-  return state;
 }

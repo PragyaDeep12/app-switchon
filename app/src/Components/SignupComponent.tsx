@@ -1,4 +1,10 @@
-import React, { useState, useContext, FormEvent, useReducer } from "react";
+import React, {
+  useState,
+  useContext,
+  FormEvent,
+  useReducer,
+  useEffect
+} from "react";
 import { Link } from "react-router-dom";
 import LoginContext from "../Context/LoginContext";
 import userReducer from "../Reducer/UserReducer";
@@ -7,7 +13,7 @@ import { CREATE_USER } from "../AppConstants";
 //  } from "react-router-dom";
 export default function SignupComponent(props: any) {
   const {
-    state: { loginInfo },
+    state,
     actions: { signUp }
   } = useContext<any>(LoginContext);
   const [deptList, setDeptList] = useState([
@@ -16,21 +22,23 @@ export default function SignupComponent(props: any) {
     "Department3",
     "Department4"
   ]);
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [rPassword, setRPassword] = useState("");
-  const [department, setDepartment] = useState("");
+  const [userName, setUserName] = useState();
+  const [email, setEmail] = useState();
+  const [name, setName] = useState();
+  const [password, setPassword] = useState();
+  const [rPassword, setRPassword] = useState();
+  const [department, setDepartment] = useState();
   const [error, setError] = useState<{ type: any; error_message: any }>({
     type: null,
     error_message: null
   });
-  const [state, dispatch] = useReducer(userReducer, {});
+  const [userState, dispatch] = useReducer(userReducer, []);
+  useEffect(() => {
+    console.log(userState);
+  }, [userState]);
   const formSubmit = async (e: FormEvent) => {
     console.log("here");
     e.preventDefault();
-    // setError({ type: "username", error_message: "Name Already Exist" });
     if (userName == null || email == null || password == null || name == null) {
       alert("one or more fields might be empty");
     } else {
@@ -41,14 +49,16 @@ export default function SignupComponent(props: any) {
         // props.onCreateUser(
         console.log("here");
         let user = {
-            userName: userName,
-            email: email,
-            uid: null,
-            name: name,
-            department: department
-          },
-          password;
-        dispatch({ type: CREATE_USER, user: user, password: password });
+          userName: userName,
+          email: email,
+          uid: null,
+          name: name,
+          department: department,
+          password: password
+        };
+
+        await signUp(user);
+        console.log();
         // );
       }
     }

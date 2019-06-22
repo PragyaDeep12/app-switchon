@@ -4,4 +4,5 @@ export default interface User {
   uid: String | null;
   status: String | null;
   name: String | null;
+  department: String | null;
 }

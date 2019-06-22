@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { Component } from "react";
 import { useContext, useEffect } from "react";
 import "./App.css";
@@ -6,6 +6,7 @@ import "./Styles/stylesheet.css";
 import "./Styles/bootstrap.css";
 import LoginProvider from "./Context/LoginProvider";
 import CustomSnackbar from "./Components/CustomSnackBar";
+import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,7 +17,12 @@ import LoginContext from "./Context/LoginContext";
 import Home from "./Pages/Home";
 import LoginSignup from "./Pages/LoginSignup";
 import Loading from "./Pages/Loading";
-function App() {
+import { createUser } from "./Actions/UserActions";
+function App(props: any) {
+  // const onCreateUser = (e: any) => {
+  //   props.onCreateUser({ user: { userName: e.target.value } });
+  // };
+
   return (
     <div className="App">
       <LoginProvider>
@@ -59,8 +65,19 @@ function App() {
     </div>
   );
 }
-
 export default App;
+// const mapStateToProps = (state: any) => ({
+//   requests: state.requests,
+//   loginInfo: state.loginInfo
+// });
+// const mapActionsToProps = {
+//   onCreateUser: createUser
+// };
+// export default connect(
+//   mapStateToProps,
+//   mapActionsToProps
+// )(App);
+
 // function LoginWrapper(props: any) {
 //   const {
 //     state: { loginInfo }

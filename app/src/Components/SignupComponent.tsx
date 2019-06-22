@@ -1,6 +1,8 @@
-import React, { useState, useContext, FormEvent } from "react";
+import React, { useState, useContext, FormEvent, useReducer } from "react";
 import { Link } from "react-router-dom";
 import LoginContext from "../Context/LoginContext";
+import userReducer from "../Reducer/UserReducer";
+import { CREATE_USER } from "../AppConstants";
 // import LoginContext from "../Contexts/LoginContext";
 //  } from "react-router-dom";
 export default function SignupComponent(props: any) {
@@ -19,11 +21,14 @@ export default function SignupComponent(props: any) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [rPassword, setRPassword] = useState("");
+  const [department, setDepartment] = useState("");
   const [error, setError] = useState<{ type: any; error_message: any }>({
     type: null,
     error_message: null
   });
+  const [state, dispatch] = useReducer(userReducer, {});
   const formSubmit = async (e: FormEvent) => {
+    console.log("here");
     e.preventDefault();
     // setError({ type: "username", error_message: "Name Already Exist" });
     if (userName == null || email == null || password == null || name == null) {
@@ -33,7 +38,18 @@ export default function SignupComponent(props: any) {
         alert("password and alert password do not match");
       } else {
         //final signup
-        var res = await signUp(email, password, userName, name);
+        // props.onCreateUser(
+        console.log("here");
+        let user = {
+            userName: userName,
+            email: email,
+            uid: null,
+            name: name,
+            department: department
+          },
+          password;
+        dispatch({ type: CREATE_USER, user: user, password: password });
+        // );
       }
     }
   };
@@ -81,7 +97,12 @@ export default function SignupComponent(props: any) {
             />
           </div>
           <div className="input-group mb-3">
-            <select className="form-control">
+            <select
+              className="form-control"
+              onChange={e => {
+                setDepartment(e.target.value);
+              }}
+            >
               <option>Select Department</option>
               {deptList.map((item, index) => {
                 return <option key={index}>{item}</option>;

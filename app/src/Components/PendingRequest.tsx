@@ -1,7 +1,8 @@
-import * as React from "react";
-import store from "../Reducer/Store";
+import React, { useEffect, useState } from "react";
 export default function PendingRequest(props: any) {
-  var requestList = store.getState().request;
+  // var requestList = store.getState().request;
+  const { request } = props;
+  console.log(request);
   return (
     <div className="input-group mb-3">
       <input
@@ -17,12 +18,12 @@ export default function PendingRequest(props: any) {
           id="basic-addon2"
           aria-describedby="basic-addon3"
         >
-          {requestList[0].message}
+          {props.request.userFrom.email}
         </span>
       </div>
       <div className="input-group-append">
         <span className="input-group-text" id="basic-addon3">
-          {requestList[0].userFrom ? requestList[0].userFrom.name : ""}
+          {props.request.userTo.email}
         </span>
       </div>
     </div>

@@ -6,7 +6,7 @@ import RequestMessage from "../Models/RequestMessage";
 import User from "../Models/User";
 import store from "../Reducer/Store";
 import { NEW_REQUEST_RAISED } from "../AppConstants";
-import { newRequest } from "../Actions/RequestActions";
+import { newRequest, newRequestArrived } from "../Actions/RequestActions";
 import { socket } from "../Dao/SocketDAO";
 export default function RequestForm() {
   // var fromUser: User = store.getState().user as User;
@@ -42,21 +42,29 @@ export default function RequestForm() {
       // Server emits this event when some other client initiates a request
       socket.on("newRequestArrived", (requestArrived: any) => {
         // this line pushes then new message to local reducer
-        store.dispatch(newRequest(requestArrived));
+        store.dispatch(newRequestArrived(requestArrived));
+      });
+      socket.on("newUserList", (data: any) => {
+        console.log(data);
+        setUserList(data);
       });
     }
   }, []);
-
-  socket.on("newUserList", (data: any) => {
-    console.log(data);
-    setUserList(data);
-  });
+  useEffect(() => {
+    socket.emit("getUserListByDepartment", dept);
+  }, [dept]);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    setRequestMessage({ userFrom: fromUser, userTo: toUser, state: "pending" });
-    if (requestMessage) {
-      store.dispatch(newRequest(requestMessage));
+    var req = {
+      userFrom: fromUser,
+      userTo: JSON.parse(toUser),
+      state: "pending"
+    };
+    setRequestMessage(req);
+    // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });
+    if (req) {
+      store.dispatch(newRequest(req));
     }
     // if (loginInfo.user && loginInfo.user.userName) {
     //   await setRequestMessage({
@@ -97,9 +105,8 @@ export default function RequestForm() {
               <select
                 className="form-control"
                 name="department"
-                onChange={(e: any) => {
-                  setDept(e.target.value);
-                  socket.emit("getUserListByDepartment", e.target.value);
+                onChange={e => {
+                  setDept(e.currentTarget.value);
                 }}
               >
                 <option> Department</option>
@@ -114,8 +121,8 @@ export default function RequestForm() {
               <select
                 className="form-control"
                 onChange={e => {
-                  if (e.target) setToUser(e.target.value);
-                  console.log(requestMessage);
+                  if (e.currentTarget) setToUser(e.currentTarget.value);
+                  // console.log(requestMessage);
                 }}
                 name="userTo"
               >
@@ -131,7 +138,7 @@ export default function RequestForm() {
             </div>
           </div>
         </div>
-        <div className="input-group mb-5">
+        {/* <div className="input-group mb-5">
           <textarea
             className="form-control"
             name=""
@@ -140,7 +147,7 @@ export default function RequestForm() {
             rows={8}
             placeholder="Enter Your Messgae"
           />
-        </div>
+        </div> */}
         <div className="row">
           <div className="col">
             <button className="btn btn-light">Cancel</button>

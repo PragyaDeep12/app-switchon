@@ -1,9 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Component } from "react";
 import PendingRequest from "./PendingRequest";
+import store from "../Reducer/Store";
+import { socket } from "../Dao/SocketDAO";
+import { recievedAllRequests } from "../Actions/RequestActions";
+import RequestMessage from "../Models/RequestMessage";
 export default function PendingRequestList() {
-  const [requestList, setRequestList] = useState([]);
+  const [requestList, setRequestList] = useState<RequestMessage[]>();
+
+  let isMounted = false;
+  useEffect(() => {
+    if (!isMounted) {
+      isMounted = true;
+      console.log("helo");
+      socket.emit("fetchAllRequests", "OK");
+      console.log("emitted");
+      socket.on("AllRequestsFetched", (requestList: any) => {
+        console.log(requestList);
+        store.dispatch(recievedAllRequests(requestList));
+      });
+      setRequestList(store.getState().request);
+      store.subscribe(() => {
+        var requestList = store.getState().request;
+        console.log(requestList);
+        setRequestList(store.getState().request);
+      });
+    }
+  }, []);
   return (
     <div>
       <div className="input-group mb-3">
@@ -20,7 +44,7 @@ export default function PendingRequestList() {
             id="basic-addon2"
             aria-describedby="basic-addon3"
           >
-            @example.com
+            @example.com1
           </span>
         </div>
         <div className="input-group-append">
@@ -29,9 +53,15 @@ export default function PendingRequestList() {
           </span>
         </div>
       </div>
-      {requestList.map((item, index) => {
-        return <PendingRequest request={item} />;
-      })}
+      {requestList
+        ? requestList.map((item, index) => {
+            console.log(item);
+            // return <PendingRequest request={item} key={index} />;
+            return (
+              <div key={index}>{item.userFrom ? item.userFrom.email : ""}</div>
+            );
+          })
+        : ""}
     </div>
   );
 }

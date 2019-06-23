@@ -6,10 +6,10 @@ import RequestMessage from "../Models/RequestMessage";
 import User from "../Models/User";
 import store from "../Reducer/Store";
 import { NEW_REQUEST_RAISED } from "../AppConstants";
+import { newRequest } from "../Actions/RequestActions";
+import { socket } from "../Dao/SocketDAO";
 export default function RequestForm() {
   var fromUser: User = store.getState().user as User;
-  var requestList = store.getState().request;
-  console.log(requestList);
   const [deptList, setDeptList] = React.useState([
     "Department1",
     "Department2",
@@ -28,11 +28,16 @@ export default function RequestForm() {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      // var user =
-      // if (user)
-      // fromUser= user;
+      //Automatically get data on update
+      store.subscribe(() => {
+        console.log(store.getState().user);
+      });
+      socket.on("newRequestArrived", (requestArrived: any) => {
+        store.dispatch(newRequest(requestArrived));
+      });
     }
   }, []);
+
   const onChange = (e: any) => {
     setRequestMessage({ ...requestMessage, [e.target.name]: e.target.value });
     console.log(requestMessage);
@@ -46,10 +51,7 @@ export default function RequestForm() {
         state: "pending"
       });
     }
-    store.dispatch({
-      type: NEW_REQUEST_RAISED,
-      payload: requestMessage
-    });
+    store.dispatch(newRequest(requestMessage));
   };
   return (
     <div className="basic-form">
@@ -121,11 +123,7 @@ export default function RequestForm() {
           </div>
         </div>
       </form>
-      <div>
-        {requestList.map((value, index) => {
-          return <div>{value.userFrom ? value.userFrom.name : ""}</div>;
-        })}
-      </div>
+
       <button
         onClick={() => {
           logout();

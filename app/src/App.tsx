@@ -87,9 +87,12 @@ function LoginWrapper(props: any) {
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
-  // let isMounted = false;
-  //   useEffect(() => {
-  //     if (!isMounted) {
+  let isMounted = false;
+  useEffect(() => {
+    if (!isMounted) {
+      isMounted = true;
+    }
+  });
   //       isMounted = true;
   //       // firebase.auth().onAuthStateChanged(
   //       //   user => {

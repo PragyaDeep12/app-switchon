@@ -11,6 +11,8 @@ import { socket } from "../Dao/SocketDAO";
 export default function RequestForm() {
   // var fromUser: User = store.getState().user as User;
   const [fromUser, setFromUser] = useState();
+  const [toUser, setToUser] = useState();
+  const [dept, setDept] = useState();
   const [deptList, setDeptList] = React.useState([
     "Department1",
     "Department2",
@@ -32,6 +34,7 @@ export default function RequestForm() {
 
       var user = store.getState().user as User;
       setFromUser(user);
+
       //Automatically get data on update
       store.subscribe(() => {
         console.log(store.getState().request);
@@ -48,28 +51,28 @@ export default function RequestForm() {
     console.log(data);
     setUserList(data);
   });
-  const onChange = (e: any) => {
-    setRequestMessage({ ...requestMessage, [e.target.name]: e.target.value });
-    console.log(requestMessage);
-  };
-  const onSubmit = (e: any) => {
+
+  const onSubmit = async (e: any) => {
     e.preventDefault();
-    if (loginInfo.user && loginInfo.user.userName) {
-      setRequestMessage({
-        ...requestMessage,
-        userFrom: fromUser,
-        state: "pending"
-      });
+    setRequestMessage({ userFrom: fromUser, userTo: toUser, state: "pending" });
+    if (requestMessage) {
+      store.dispatch(newRequest(requestMessage));
     }
+    // if (loginInfo.user && loginInfo.user.userName) {
+    //   await setRequestMessage({
+    //     ...requestMessage,
+    //     userFrom: fromUser,
+    //     state: "pending"
+    //   });
+    // }
     //same if this client want to push message then it pushes data to local reducer ,
     // 2. then reducer pushes to server socket
-    //3. then server again emits an event to which comes to this socket
+    //3. then server again emits an event which comes to this socket
     // 4. In server use io.sockets.in(department) to emit request
-    store.dispatch(newRequest(requestMessage));
   };
   return (
     <div className="basic-form">
-      <form onSubmit={onSubmit}>
+      <form>
         <div className="input-group mb-3">
           <input
             className="form-control"
@@ -95,7 +98,7 @@ export default function RequestForm() {
                 className="form-control"
                 name="department"
                 onChange={(e: any) => {
-                  onChange(e);
+                  setDept(e.target.value);
                   socket.emit("getUserListByDepartment", e.target.value);
                 }}
               >
@@ -108,7 +111,14 @@ export default function RequestForm() {
           </div>
           <div className="col">
             <div className="input-group mb-3">
-              <select className="form-control" onChange={onChange}>
+              <select
+                className="form-control"
+                onChange={e => {
+                  if (e.target) setToUser(e.target.value);
+                  console.log(requestMessage);
+                }}
+                name="userTo"
+              >
                 <option>User</option>
                 {userList.map((item, index) => {
                   return (
@@ -136,7 +146,11 @@ export default function RequestForm() {
             <button className="btn btn-light">Cancel</button>
           </div>
           <div className="col">
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={onSubmit}
+            >
               Submit
             </button>
           </div>

@@ -35,6 +35,7 @@ express.get("/*", function(req, res) {
 });
 const loginDetails = [];
 const userList = [];
+const msgArr = [];
 io.set("origins", "*:*");
 io.on("connection", socket => {
   console.log("connected");
@@ -92,6 +93,15 @@ io.on("connection", socket => {
         { userName: "c", email: "c@b.com", name: "acca" }
       ];
       socket.emit("newUserList", listUserByDept);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  socket.on("newRequest", data => {
+    try {
+      console.log(data);
+      msgArr.push(data);
+      socket.emit("newRequestArrived", data);
     } catch (err) {
       console.log(err);
     }

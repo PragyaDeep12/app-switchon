@@ -7,6 +7,8 @@ import ApprovedList from "../Components/ApprovedList";
 import WaitingList from "../Components/WaitingList";
 import { socket } from "../Dao/SocketDAO";
 import LoginContext from "../Context/LoginContext";
+import store from "../Reducer/Store";
+import { newRequestArrived } from "../Actions/RequestActions";
 
 export default function Home(props: any) {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -14,6 +16,7 @@ export default function Home(props: any) {
     state: { loginInfo }
   } = useContext(LoginContext);
   let isMounted = false;
+
   window.addEventListener("resize", listner => {
     if (window.innerWidth <= 700) {
       setIsMobile(true);
@@ -34,6 +37,11 @@ export default function Home(props: any) {
       }
     }
   }, []);
+  socket.on("newRequestArrived", (data: any) => {
+    console.log("new request arrived");
+    store.dispatch(newRequestArrived(data));
+    console.log(store.getState());
+  });
   // useEffect(() => {
   //   // console.log(isMobile);
   //   if (!isMobile) {

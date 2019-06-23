@@ -12,9 +12,15 @@ export default function requestReducer(
   switch (action.type) {
     case NEW_REQUEST_RAISED: {
       //instead of pushing to  array you can push to socket
-      state.push(action.payload as RequestMessage);
+      //  state.push(action.payload as RequestMessage);
       //push data using to server using socket
       socket.emit("newRequest", action.payload);
+      return state;
+    }
+    case NEW_REQUEST_ARRIVED: {
+      //instead of pushing to  array you can push to socket
+      state.push(action.payload as RequestMessage);
+
       return state;
     }
 

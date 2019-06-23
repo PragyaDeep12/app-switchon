@@ -100,8 +100,13 @@ io.on("connection", socket => {
   });
   socket.on("getUserListByDepartment", async data => {
     try {
-      let listUserByDept = await getUserByDept(data.department);
-      socket.emit("newUserList", listUserByDept);
+      await getUserByDept(data.department)
+        .then(listUserByDept => {
+          socket.emit("newUserList", listUserByDept);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -119,9 +124,13 @@ io.on("connection", socket => {
   });
   socket.on("fetchAllRequests", async data => {
     try {
-      var msgs = await fetchAllRequest();
-      console.log(msgs);
-      socket.emit("AllRequestsFetched", msgs);
+      await fetchAllRequest()
+        .then(msgs => {
+          socket.emit("AllRequestsFetched", msgs);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (err) {
       console.error(err);
     }

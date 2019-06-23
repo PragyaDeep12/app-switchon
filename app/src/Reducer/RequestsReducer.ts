@@ -14,13 +14,11 @@ export default function requestReducer(
       //instead of pushing to  array you can push to socket
       state.push(action.payload as RequestMessage);
       //push data using to server using socket
-      // socket.emit("newRequest",action.payload);
+      socket.emit("newRequest", action.payload);
       return state;
     }
 
     default: {
-      // console.log("default");
-      // socket.on("newRequestArrival",)
       return initialState;
     }
   }

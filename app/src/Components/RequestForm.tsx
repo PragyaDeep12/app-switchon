@@ -36,7 +36,9 @@ export default function RequestForm() {
       store.subscribe(() => {
         console.log(store.getState().request);
       });
+      // Server emits this event when some other client initiates a request
       socket.on("newRequestArrived", (requestArrived: any) => {
+        // this line pushes then new message to local reducer
         store.dispatch(newRequest(requestArrived));
       });
     }
@@ -59,6 +61,10 @@ export default function RequestForm() {
         state: "pending"
       });
     }
+    //same if this client want to push message then it pushes data to local reducer ,
+    // 2. then reducer pushes to server socket
+    //3. then server again emits an event to which comes to this socket
+    // 4. In server use io.sockets.in(department) to emit request
     store.dispatch(newRequest(requestMessage));
   };
   return (

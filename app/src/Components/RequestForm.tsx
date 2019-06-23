@@ -51,7 +51,7 @@ export default function RequestForm() {
     }
   }, []);
   useEffect(() => {
-    socket.emit("getUserListByDepartment", dept);
+    socket.emit("getUserListByDepartment", { department: dept });
   }, [dept]);
 
   const onSubmit = async (e: any) => {
@@ -59,7 +59,8 @@ export default function RequestForm() {
     var req = {
       userFrom: fromUser,
       userTo: JSON.parse(toUser),
-      state: "pending"
+      state: "pending",
+      department: dept
     };
     setRequestMessage(req);
     // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });

@@ -29,30 +29,31 @@ export default function PendingRequestList() {
     }
   }, []);
   return (
+    // <div>
+    //   <div className="input-group mb-3">
+    //     <input
+    //       type="text"
+    //       className="form-control"
+    //       placeholder="Recipient's username"
+    //       aria-label="Recipient's username"
+    //       aria-describedby="basic-addon2"
+    //     />
+    //     <div className="input-group-append">
+    //       <span
+    //         className="input-group-text"
+    //         id="basic-addon2"
+    //         aria-describedby="basic-addon3"
+    //       >
+    //         @example.com1
+    //       </span>
+    //     </div>
+    //     <div className="input-group-append">
+    //       <span className="input-group-text" id="basic-addon3">
+    //         @example.com
+    //       </span>
+    //     </div>
+    //   </div>
     <div>
-      <div className="input-group mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Recipient's username"
-          aria-label="Recipient's username"
-          aria-describedby="basic-addon2"
-        />
-        <div className="input-group-append">
-          <span
-            className="input-group-text"
-            id="basic-addon2"
-            aria-describedby="basic-addon3"
-          >
-            @example.com1
-          </span>
-        </div>
-        <div className="input-group-append">
-          <span className="input-group-text" id="basic-addon3">
-            @example.com
-          </span>
-        </div>
-      </div>
       {requestList
         ? requestList.map((request, index) => {
             console.log(request);

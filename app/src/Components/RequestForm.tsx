@@ -6,6 +6,7 @@ import RequestMessage from "../Models/RequestMessage";
 import User from "../Models/User";
 import store from "../Reducer/Store";
 import { NEW_REQUEST_RAISED } from "../AppConstants";
+import { socket } from "../Dao/SocketDAO";
 export default function RequestForm() {
   var fromUser: User = store.getState().user as User;
   var requestList = store.getState().request;
@@ -33,6 +34,10 @@ export default function RequestForm() {
       // fromUser= user;
     }
   }, []);
+  socket.on("newUserList", (data: any) => {
+    console.log(data);
+    setUserList(data);
+  });
   const onChange = (e: any) => {
     setRequestMessage({ ...requestMessage, [e.target.name]: e.target.value });
     console.log(requestMessage);
@@ -76,7 +81,10 @@ export default function RequestForm() {
               <select
                 className="form-control"
                 name="department"
-                onChange={onChange}
+                onChange={(e: any) => {
+                  onChange(e);
+                  socket.emit("getUserListByDepartment", e.target.value);
+                }}
               >
                 <option> Department</option>
                 {deptList.map((item, index) => {

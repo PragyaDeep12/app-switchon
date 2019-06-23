@@ -106,6 +106,13 @@ io.on("connection", socket => {
       console.log(err);
     }
   });
+  socket.on("fetchAllRequests", data => {
+    try {
+      socket.emit("AllRequestsFetched", msgArr);
+    } catch (err) {
+      console.error(err);
+    }
+  });
 });
 
 server.listen(process.env.PORT || 4000);

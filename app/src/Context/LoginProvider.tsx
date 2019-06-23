@@ -22,6 +22,7 @@ export default function LoginProvider(props: any) {
     socket.emit("loginUser", { email: email, password: password });
     socket.on("loginSuccessful", async (data: any) => {
       console.log(data);
+      localStorage.setItem("user", data);
       await setUserDetails(data);
     });
     socket.on("loginFailed", async (data: any) => {

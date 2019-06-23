@@ -31,10 +31,9 @@ export default function requestReducer(
     case ALL_REQUEST_FETCH: {
       var RequestMessages = action.payload as RequestMessage[];
       console.log(RequestMessages);
-      RequestMessages.forEach(element => {
-        state.push(element);
-      });
+
       state = RequestMessages;
+      return state;
     }
 
     default: {

@@ -67,16 +67,21 @@ io.on("connection", socket => {
   });
   socket.on("loginUser", async data => {
     try {
-      let user = await checkLoginDetails(data.email, data.password);
-      if (user) {
-        // let user = await getUser(data.email);
-        socket.emit("loginSuccessful", user);
-      } else {
-        console.log(loginDetails);
-        socket.emit("loginFailed", {
-          errorMessage: "Incorrect user id or password"
+      await checkLoginDetails(data.email, data.password)
+        .then(user => {
+          if (user) {
+            // let user = await getUser(data.email);
+            socket.emit("loginSuccessful", user);
+          } else {
+            console.log(loginDetails);
+            socket.emit("loginFailed", {
+              errorMessage: "Incorrect user id or password"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
         });
-      }
     } catch (err) {
       socket.emit("loginFailed", { errorMessage: "Unexpected Error Occured" });
 
@@ -141,21 +146,24 @@ server.listen(process.env.PORT || 4000);
 const checkLoginDetails = async (email, password) => {
   var promise = new Promise((resolve, reject) => {
     try {
-      client.connect(async err => {
-        const db = client.db(dbName);
-        collection = db.collection("users");
-        var myCursor = await collection.find({
-          email: email,
-          password: password
-        });
-        var user;
-        if (myCursor)
-          myCursor.forEach(user => {
-            resolve(user);
+      MongoClient.connect(
+        uri,
+        { useNewUrlParser: true },
+        async (error, client) => {
+          const db = client.db(dbName);
+          collection = db.collection("users");
+          var myCursor = await collection.find({
+            email: email,
+            password: password
           });
-        else reject(null);
-        client.close();
-      });
+          var user;
+          if (myCursor)
+            myCursor.forEach(user => {
+              resolve(user);
+            });
+          else reject(null);
+        }
+      );
     } catch (error) {
       console.error(error);
       reject(false);
@@ -257,19 +265,23 @@ const getUserByDept = async dept => {
 const addUser = user => {
   var promise = new Promise((resolve, reject) => {
     try {
-      client.connect(async err => {
-        const db = client.db(dbName);
-        const collection = db.collection("users");
-        collection.insertOne(user, res => {
-          if (!res) {
-            resolve(request);
-          } else {
-            reject(null);
-          }
-        });
-        // perform actions on the collection object
-        client.close();
-      });
+      MongoClient.connect(
+        uri,
+        { useNewUrlParser: true },
+        async (error, client) => {
+          const db = client.db(dbName);
+          const collection = db.collection("users");
+          collection.insertOne(user, res => {
+            if (!res) {
+              resolve(request);
+            } else {
+              reject(null);
+            }
+          });
+          // perform actions on the collection object
+          // client.close();
+        }
+      );
     } catch (err) {
       console.log(err);
       reject(err);
@@ -291,7 +303,7 @@ const addRequest = request => {
           }
         });
         // perform actions on the collection object
-        client.close();
+        // client.close();
       });
     } catch (err) {
       console.log(err);

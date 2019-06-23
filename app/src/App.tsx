@@ -22,6 +22,10 @@ import { createStore, combineReducers } from "redux";
 import userReducer from "./Reducer/UserReducer";
 import requestReducer from "./Reducer/RequestsReducer";
 import store from "./Reducer/Store";
+import PendingRequestList from "./Components/PendingRequestList";
+import WaitingList from "./Components/WaitingList";
+import ApprovedList from "./Components/ApprovedList";
+import RequestForm from "./Components/RequestForm";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
@@ -43,25 +47,25 @@ function App(props: any) {
                 exact={true}
                 render={props => <LoginWrapper page="login" />}
               />
-              <Route
+              <PrivateRoute
                 path="/requestform"
                 exact={true}
-                render={props => <Home page="form" />}
+                component={RequestForm}
               />
-              <Route
+              <PrivateRoute
                 path="/pending"
                 exact={true}
-                render={props => <Home page="pending" />}
+                component={PendingRequestList}
               />
-              <Route
+              <PrivateRoute
                 path="/approved"
                 exact={true}
-                render={props => <Home page="approved" />}
+                component={ApprovedList}
               />
-              <Route
+              <PrivateRoute
                 path="/waitinglist"
                 exact={true}
-                render={props => <Home page="waitinglist" />}
+                component={WaitingList}
               />
             </Switch>
           </Router>
@@ -85,14 +89,21 @@ export default App;
 
 function LoginWrapper(props: any) {
   const {
-    state: { loginInfo }
-  } = useContext(LoginContext);
+    state: { loginInfo },
+    actions: { setUserDetails, logout }
+  }: any = useContext(LoginContext);
   let isMounted = false;
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
+      var user = localStorage.getItem("user");
+      if (user) {
+        setUserDetails(user);
+      } else {
+        logout();
+      }
     }
-  });
+  }, []);
   //       isMounted = true;
   //       // firebase.auth().onAuthStateChanged(
   //       //   user => {
@@ -110,26 +121,28 @@ function LoginWrapper(props: any) {
   if (loginInfo && loginInfo.isLoggedIn === true && loginInfo.user != null) {
     return <Redirect to="/requestform" />;
   } else {
-    // if (loginInfo.isLoggedIn === false) {
-    return <LoginSignup page={props.page} />;
-    // }
-    //  return <Loading />;
+    if (loginInfo.isLoggedIn === false) {
+      return <LoginSignup page={props.page} />;
+    }
+
+    return <Loading />;
   }
 }
 // }
-// function PrivateRoute({ component, ...rest }: any) {
-//   const {
-//     state: { loginInfo }
-//   } = useContext(LoginContext);
-//   return (
-//     <Route
-//       {...rest}
-//       render={props => {
-//         if (!loginInfo.isLoggedIn) {
-//           return <Redirect to="/login" />;
-//         }
-//         return <Component {...props} />;
-//       }}
-//     />
-//   );
-// }
+function PrivateRoute({ component, ...rest }: any) {
+  const {
+    state: { loginInfo }
+  } = useContext(LoginContext);
+  console.log(rest);
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        if (!loginInfo.isLoggedIn) {
+          return <Redirect to="/login" />;
+        }
+        return <Component {...props} />;
+      }}
+    />
+  );
+}

@@ -6,6 +6,7 @@ import { UPDATE_USER, LOGIN_USER, CREATE_USER } from "../AppConstants";
 import store from "../Reducer/Store";
 import User from "../Models/User";
 import { Redirect } from "react-router";
+import { socket } from "../Dao/SocketDAO";
 
 export default function LoginProvider(props: any) {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
@@ -17,44 +18,28 @@ export default function LoginProvider(props: any) {
     setLoginInfo(loginInfo);
   };
   const login = async (email: string, password: string) => {
-    // console.log(email, password);
-    // store.dispatch({
-    //   type: LOGIN_USER,
-    //   user: {
-    //     email: email,
-    //     password: password
-    //   }
-    // });
-    // console.log(store.getState().user);
-    // //store.
-
     //check from backend firebase or mongo for loginAuth
-    var uid = "jkfsndjkf";
-    if (email === "pragya.deep19@gmail.com" && password === "123456") {
-      setLoginInfo({ ...loginInfo, isLoggedIn: true });
-      getUserDetails(uid);
-    }
+    socket.emit("loginUser", { email: email, password: password });
+    socket.on("loginSuccessful", async (data: any) => {
+      console.log(data);
+      await setUserDetails(data);
+    });
   };
   const getDb = () => {};
 
   const signUp = async (user: any) => {
-    // console.log(
-    //   await store.dispatch({
-    //     type: CREATE_USER,
-    //     user: user
-    //   })
-    // );
+    socket.emit("signUpUser", { user: user, password: "1234" });
+    socket.on("signUpSuccessful", (data: any) => {
+      console.log(data);
+      setUserDetails(data);
+    });
+    socket.on("signUpFailed", (data: any) => {
+      console.log(data);
+    });
   };
-  const getUserDetails = (uid: string) => {
+  const setUserDetails = (user: any) => {
     //fetch data from data base
-    var user: User = {
-      department: "department1",
-      email: "pragya.deep19@gmail.com",
-      name: "Pragya Deep",
-      status: "online",
-      userName: "Pragya19",
-      uid: uid
-    };
+
     store.dispatch({
       type: UPDATE_USER,
       payload: { user: user }
@@ -68,15 +53,28 @@ export default function LoginProvider(props: any) {
 
     console.log(store.getState().user);
   };
+  const logout = () => {
+    store.dispatch({
+      type: UPDATE_USER,
+      payload: { user: {} }
+    });
+    if (store.getState().user as User)
+      setLoginInfo({
+        ...loginInfo,
+        user: store.getState().user as User,
+        isLoggedIn: false
+      });
+  };
   return (
     <LoginContext.Provider
       value={{
         state: { loginInfo },
         actions: {
           login,
-          getUserDetails,
+          setUserDetails,
           signUp,
-          setLoginDetails
+          setLoginDetails,
+          logout
         }
       }}
     >

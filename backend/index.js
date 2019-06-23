@@ -33,6 +33,8 @@ express.get("/*", function(req, res) {
   res.sendFile(path.join(__dirname, "./public", "index.html"));
   // res.sendFile("index.html", { root: path.join(__dirname, "public") });
 });
+const loginDetails = [];
+const userList = [];
 io.set("origins", "*:*");
 io.on("connection", socket => {
   console.log("connected");
@@ -50,5 +52,51 @@ io.on("connection", socket => {
   socket.on("disconnect", data => {
     console.log("disconnected");
   });
+  socket.on("loginUser", async data => {
+    try {
+      let result = await checkLoginDetails(data.email, data.password);
+      if (result) {
+        let user = await getUser(data.email);
+        socket.emit("loginSuccessful", user);
+      } else {
+        socket.emit("loginFailed", {
+          errorMessage: "Incorrect user id or password"
+        });
+      }
+    } catch (err) {
+      socket.emit("loginFailed", { errorMessage: "Unexpected Error Occured" });
+
+      console.log(err);
+    }
+  });
+  socket.on("signUpUser", async data => {
+    try {
+      await loginDetails.push({
+        email: data.user.email,
+        password: data.password
+      });
+      await userList.push(data.user);
+      socket.emit("signUpSuccessful", data.user);
+      console.log(userList);
+    } catch (err) {
+      socket.emit("signUpFailed", { errorMessage: "Unexpected error occured" });
+      console.log(err);
+    }
+  });
 });
+
 server.listen(process.env.PORT || 4000);
+const checkLoginDetails = async (email, password) => {
+  if (
+    loginDetails.find(
+      user => user.email === email && user.password === password
+    )
+  )
+    return true;
+  else return false;
+};
+
+const getUser = async email => {
+  let user = userList.find(user => user.email === email);
+  return user;
+};

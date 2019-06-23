@@ -18,8 +18,9 @@ export default function RequestForm() {
   ]);
   const [userList, setUserList]: [Array<User>, any] = useState([]);
   const {
-    state: { loginInfo }
-  } = React.useContext(LoginContext);
+    state: { loginInfo },
+    actions: { logout }
+  } = React.useContext<any>(LoginContext);
 
   const [requestMessage, setRequestMessage] = useState<RequestMessage>();
   let isMounted: any = false;
@@ -125,6 +126,13 @@ export default function RequestForm() {
           return <div>{value.userFrom ? value.userFrom.name : ""}</div>;
         })}
       </div>
+      <button
+        onClick={() => {
+          logout();
+        }}
+      >
+        logout
+      </button>
     </div>
   );
 }

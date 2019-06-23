@@ -39,7 +39,13 @@ export default function SignupComponent(props: any) {
   const formSubmit = async (e: FormEvent) => {
     console.log("here");
     e.preventDefault();
-    if (userName == null || email == null || password == null || name == null) {
+    if (
+      userName == null ||
+      email == null ||
+      password == null ||
+      name == null ||
+      department == null
+    ) {
       alert("one or more fields might be empty");
     } else {
       if (password !== rPassword) {

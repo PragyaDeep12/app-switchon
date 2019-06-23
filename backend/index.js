@@ -200,25 +200,32 @@ const fetchAllRequest = () => {
 const getUserByDept = async dept => {
   var promise = new Promise((resolve, reject) => {
     try {
-      client.connect(async err => {
-        const db = client.db(dbName);
-        const collection = db.collection("users");
-        var myCursor = await collection.find({ department: dept });
-        var userBYDept = [];
-        if (myCursor) {
-          myCursor.forEach(element => {
-            userBYDept.push(element);
-          });
+      MongoClient.connect(
+        uri,
+        { useNewUrlParser: true },
+        async (error, client) => {
+          if (error) {
+            console.error(error);
+          } else {
+            database = client.db(dbName);
+            collection = database.collection("users");
+            var myCursor = await collection.find({ department: dept });
+            var users = [];
+            await myCursor.forEach(elem => {
+              console.log(elem);
+              users.push(elem);
+            });
+            // console.log(requests);
+            if (collection) {
+              resolve(users);
+            } else {
+              reject(null);
+            }
+          }
         }
-        if (myCursor) {
-          resolve(userBYDept);
-        } else {
-          reject(null);
-        }
-        client.close();
-      });
-    } catch (err) {
-      reject(err);
+      );
+    } catch (error) {
+      reject(null);
     }
   });
   return promise;

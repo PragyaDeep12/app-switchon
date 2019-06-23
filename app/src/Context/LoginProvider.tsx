@@ -24,11 +24,14 @@ export default function LoginProvider(props: any) {
       console.log(data);
       await setUserDetails(data);
     });
+    socket.on("loginFailed", async (data: any) => {
+      console.log(data);
+    });
   };
   const getDb = () => {};
 
   const signUp = async (user: any) => {
-    socket.emit("signUpUser", { user: user, password: "1234" });
+    socket.emit("signUpUser", { user: user, password: user.password });
     socket.on("signUpSuccessful", (data: any) => {
       console.log(data);
       setUserDetails(data);

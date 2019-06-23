@@ -59,6 +59,7 @@ io.on("connection", socket => {
         let user = await getUser(data.email);
         socket.emit("loginSuccessful", user);
       } else {
+        console.log(loginDetails);
         socket.emit("loginFailed", {
           errorMessage: "Incorrect user id or password"
         });
@@ -80,6 +81,18 @@ io.on("connection", socket => {
       console.log(userList);
     } catch (err) {
       socket.emit("signUpFailed", { errorMessage: "Unexpected error occured" });
+      console.log(err);
+    }
+  });
+  socket.on("getUserListByDepartment", data => {
+    try {
+      let listUserByDept = [
+        { userName: "a", email: "a@b.com", name: "aa" },
+        { userName: "b", email: "b@b.com", name: "abba" },
+        { userName: "c", email: "c@b.com", name: "acca" }
+      ];
+      socket.emit("newUserList", listUserByDept);
+    } catch (err) {
       console.log(err);
     }
   });

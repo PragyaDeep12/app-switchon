@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
 import RequestForm from "../Components/RequestForm";
 import PendingRequestList from "../Components/PendingRequestList";
 import ApprovedList from "../Components/ApprovedList";
 import WaitingList from "../Components/WaitingList";
+import { socket } from "../Dao/SocketDAO";
+import LoginContext from "../Context/LoginContext";
 
 export default function Home(props: any) {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const {
+    state: { loginInfo }
+  } = useContext(LoginContext);
   let isMounted = false;
   window.addEventListener("resize", listner => {
     if (window.innerWidth <= 700) {
@@ -16,9 +21,12 @@ export default function Home(props: any) {
       setIsMobile(false);
     }
   });
+
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
+      if (loginInfo.user)
+        socket.emit("getAllRequest", loginInfo.user.department);
       if (window.innerWidth <= 700) {
         setIsMobile(true);
       } else {

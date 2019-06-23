@@ -42,6 +42,10 @@ export default function RequestForm() {
     }
   }, []);
 
+  socket.on("newUserList", (data: any) => {
+    console.log(data);
+    setUserList(data);
+  });
   const onChange = (e: any) => {
     setRequestMessage({ ...requestMessage, [e.target.name]: e.target.value });
     console.log(requestMessage);
@@ -84,7 +88,10 @@ export default function RequestForm() {
               <select
                 className="form-control"
                 name="department"
-                onChange={onChange}
+                onChange={(e: any) => {
+                  onChange(e);
+                  socket.emit("getUserListByDepartment", e.target.value);
+                }}
               >
                 <option> Department</option>
                 {deptList.map((item, index) => {

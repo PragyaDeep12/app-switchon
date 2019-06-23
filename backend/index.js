@@ -170,7 +170,7 @@ const fetchAllRequest = () => {
             var requests = [];
             await myCursor.forEach(elem => {
               console.log(elem);
-              if (elem.status && elem.toEmail && elem.status === "pending")
+              if (elem.status && elem.toEmail && elem.state === "pending")
                 requests.push(elem);
             });
             // console.log(requests);

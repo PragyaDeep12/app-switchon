@@ -54,12 +54,9 @@ export default function PendingRequestList() {
         </div>
       </div>
       {requestList
-        ? requestList.map((item, index) => {
-            console.log(item);
-            // return <PendingRequest request={item} key={index} />;
-            return (
-              <div key={index}>{item.userFrom ? item.userFrom.email : ""}</div>
-            );
+        ? requestList.map((request, index) => {
+            console.log(request);
+            return <PendingRequest request={request} key={index} />;
           })
         : ""}
     </div>

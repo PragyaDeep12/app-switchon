@@ -9,7 +9,8 @@ import { NEW_REQUEST_RAISED } from "../AppConstants";
 import { newRequest } from "../Actions/RequestActions";
 import { socket } from "../Dao/SocketDAO";
 export default function RequestForm() {
-  var fromUser: User = store.getState().user as User;
+  // var fromUser: User = store.getState().user as User;
+  const [fromUser, setFromUser] = useState();
   const [deptList, setDeptList] = React.useState([
     "Department1",
     "Department2",
@@ -28,9 +29,12 @@ export default function RequestForm() {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
+
+      var user = store.getState().user as User;
+      setFromUser(user);
       //Automatically get data on update
       store.subscribe(() => {
-        console.log(store.getState().user);
+        console.log(store.getState().request);
       });
       socket.on("newRequestArrived", (requestArrived: any) => {
         store.dispatch(newRequest(requestArrived));
@@ -62,7 +66,9 @@ export default function RequestForm() {
             type="text"
             name=""
             id=""
-            value={fromUser.name ? fromUser.name.toString() : ""}
+            value={
+              fromUser ? (fromUser.name ? fromUser.name.toString() : "") : ""
+            }
             // value={
             //   loginInfo.user
             //     ? loginInfo.user.userName

@@ -4,7 +4,12 @@ import { useEffect, useContext, useState } from "react";
 import LoginContext from "../Context/LoginContext";
 import RequestMessage from "../Models/RequestMessage";
 import User from "../Models/User";
+import store from "../Reducer/Store";
+import { NEW_REQUEST_RAISED } from "../AppConstants";
 export default function RequestForm() {
+  var fromUser: User = store.getState().user as User;
+  var requestList = store.getState().request;
+  console.log(requestList);
   const [deptList, setDeptList] = React.useState([
     "Department1",
     "Department2",
@@ -18,9 +23,13 @@ export default function RequestForm() {
 
   const [requestMessage, setRequestMessage] = useState<RequestMessage>();
   let isMounted: any = false;
+
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
+      // var user =
+      // if (user)
+      // fromUser= user;
     }
   }, []);
   const onChange = (e: any) => {
@@ -32,11 +41,14 @@ export default function RequestForm() {
     if (loginInfo.user && loginInfo.user.userName) {
       setRequestMessage({
         ...requestMessage,
-        userFrom: loginInfo.user,
+        userFrom: fromUser,
         state: "pending"
       });
     }
-    console.log(requestMessage);
+    store.dispatch({
+      type: NEW_REQUEST_RAISED,
+      payload: requestMessage
+    });
   };
   return (
     <div className="basic-form">
@@ -47,13 +59,14 @@ export default function RequestForm() {
             type="text"
             name=""
             id=""
-            value={
-              loginInfo.user
-                ? loginInfo.user.userName
-                  ? loginInfo.user.userName.toString()
-                  : "Pragya"
-                : "Pragya"
-            }
+            value={fromUser.name ? fromUser.name.toString() : ""}
+            // value={
+            //   loginInfo.user
+            //     ? loginInfo.user.userName
+            //       ? loginInfo.user.userName.toString()
+            //       : "Pragya"
+            //     : "Pragya"
+            // }
           />
         </div>
         <div className="row">
@@ -107,6 +120,11 @@ export default function RequestForm() {
           </div>
         </div>
       </form>
+      <div>
+        {requestList.map((value, index) => {
+          return <div>{value.userFrom ? value.userFrom.name : ""}</div>;
+        })}
+      </div>
     </div>
   );
 }

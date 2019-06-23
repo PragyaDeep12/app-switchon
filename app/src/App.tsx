@@ -6,7 +6,7 @@ import "./Styles/stylesheet.css";
 import "./Styles/bootstrap.css";
 import LoginProvider from "./Context/LoginProvider";
 import CustomSnackbar from "./Components/CustomSnackBar";
-import { connect } from "react-redux";
+import { connect, Provider } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,50 +18,55 @@ import Home from "./Pages/Home";
 import LoginSignup from "./Pages/LoginSignup";
 import Loading from "./Pages/Loading";
 import { createUser } from "./Actions/UserActions";
+import { createStore, combineReducers } from "redux";
+import userReducer from "./Reducer/UserReducer";
+import requestReducer from "./Reducer/RequestsReducer";
+import store from "./Reducer/Store";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
   // };
-
   return (
     <div className="App">
-      <LoginProvider>
-        <CustomSnackbar />
-        <Router>
-          <Switch>
-            <Route
-              path="/"
-              exact={true}
-              render={props => <LoginSignup page="signup" />}
-            />
-            <Route
-              path="/login"
-              exact={true}
-              render={props => <LoginSignup page="login" />}
-            />
-            <Route
-              path="/requestform"
-              exact={true}
-              render={props => <Home page="form" />}
-            />
-            <Route
-              path="/pending"
-              exact={true}
-              render={props => <Home page="pending" />}
-            />
-            <Route
-              path="/approved"
-              exact={true}
-              render={props => <Home page="approved" />}
-            />
-            <Route
-              path="/waitinglist"
-              exact={true}
-              render={props => <Home page="waitinglist" />}
-            />
-          </Switch>
-        </Router>
-      </LoginProvider>
+      <Provider store={store}>
+        <LoginProvider>
+          <CustomSnackbar />
+          <Router>
+            <Switch>
+              <Route
+                path="/"
+                exact={true}
+                render={props => <LoginWrapper page="signup" />}
+              />
+              <Route
+                path="/login"
+                exact={true}
+                render={props => <LoginWrapper page="login" />}
+              />
+              <Route
+                path="/requestform"
+                exact={true}
+                render={props => <Home page="form" />}
+              />
+              <Route
+                path="/pending"
+                exact={true}
+                render={props => <Home page="pending" />}
+              />
+              <Route
+                path="/approved"
+                exact={true}
+                render={props => <Home page="approved" />}
+              />
+              <Route
+                path="/waitinglist"
+                exact={true}
+                render={props => <Home page="waitinglist" />}
+              />
+            </Switch>
+          </Router>
+        </LoginProvider>
+      </Provider>
     </div>
   );
 }
@@ -78,47 +83,36 @@ export default App;
 //   mapActionsToProps
 // )(App);
 
-// function LoginWrapper(props: any) {
-//   const {
-//     state: { loginInfo }
-//   } = useContext(LoginContext);
-//   let isMounted = false;
-//   useEffect(() => {
-//     if (!isMounted) {
-//       isMounted = true;
-//       // firebase.auth().onAuthStateChanged(
-//       //   user => {
-//       //     if (user) {
-//       //       setLoginDetails({ isLoggedIn: true, uid: user.uid, user: null });
-//       //     } else {
-//       //       setLoginDetails({ isLoggedIn: false, uid: null, user: null });
-//       //     }
-//       //   },
-//       //   error => {}
-//       // );
-//     }
-//   }, []);
-//   if (
-//     loginInfo &&
-//     loginInfo.uid != null &&
-//     loginInfo.isLoggedIn === true &&
-//     loginInfo.user === null
-//   ) {
-//     // getUserDetails(loginInfo.uid);
-//   }
-//   if (
-//     loginInfo &&
-//     loginInfo.isLoggedIn === true &&
-//     loginInfo.uid != null &&
-//     loginInfo.user != null
-//   ) {
-//     return <Redirect to="/" />;
-//   } else {
-//     if (loginInfo.isLoggedIn === false) {
-//       return <LoginSignup page={props.page} />;
-//     }
-//     return <Loading />;
-//   }
+function LoginWrapper(props: any) {
+  const {
+    state: { loginInfo }
+  } = useContext(LoginContext);
+  // let isMounted = false;
+  //   useEffect(() => {
+  //     if (!isMounted) {
+  //       isMounted = true;
+  //       // firebase.auth().onAuthStateChanged(
+  //       //   user => {
+  //       //     if (user) {
+  //       //       setLoginDetails({ isLoggedIn: true, uid: user.uid, user: null });
+  //       //     } else {
+  //       //       setLoginDetails({ isLoggedIn: false, uid: null, user: null });
+  //       //     }
+  //       //   },
+  //       //   error => {}
+  //       // );
+  //     }
+  //   }, []);
+  console.log(loginInfo);
+  if (loginInfo && loginInfo.isLoggedIn === true && loginInfo.user != null) {
+    return <Redirect to="/requestform" />;
+  } else {
+    // if (loginInfo.isLoggedIn === false) {
+    return <LoginSignup page={props.page} />;
+    // }
+    //  return <Loading />;
+  }
+}
 // }
 // function PrivateRoute({ component, ...rest }: any) {
 //   const {

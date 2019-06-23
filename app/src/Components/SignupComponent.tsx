@@ -32,10 +32,10 @@ export default function SignupComponent(props: any) {
     type: null,
     error_message: null
   });
-  const [userState, dispatch] = useReducer(userReducer, []);
-  useEffect(() => {
-    console.log(userState);
-  }, [userState]);
+  // const [userState, dispatch] = useReducer(userReducer, []);
+  // useEffect(() => {
+  //   console.log(userState);
+  // }, [userState]);
   const formSubmit = async (e: FormEvent) => {
     console.log("here");
     e.preventDefault();

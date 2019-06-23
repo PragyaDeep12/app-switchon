@@ -5,13 +5,14 @@ import LoginContext from "../Context/LoginContext";
 
 export default function LoginComponent(props: any) {
   const {
-    state: { loginInfo },
+    // state: { loginInfo },
     actions: { login }
   } = useContext<any>(LoginContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(email, password);
     await login(email, password);
   };
   return (
@@ -26,8 +27,9 @@ export default function LoginComponent(props: any) {
             <input
               type="email"
               name="email"
+              // value="pragya.deep19@gmail.com"
               onChange={e => {
-                setEmail(e.target.value);
+                setEmail(e.currentTarget.value);
               }}
               className="form-control"
               placeholder="Email-Id"
@@ -37,8 +39,9 @@ export default function LoginComponent(props: any) {
             <input
               type="password"
               name="password"
+              // value="123456"
               onChange={e => {
-                setPassword(e.target.value);
+                setPassword(e.currentTarget.value);
               }}
               className="form-control"
               placeholder="Password"

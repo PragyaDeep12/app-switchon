@@ -5,5 +5,6 @@ export default interface RequestMessage {
   userTo?: User | null;
   state?: string | null;
   userFrom?: User | null;
-  department?:string|null;
+  department?: string | null;
+  time?: Date | null;
 }

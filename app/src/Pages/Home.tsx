@@ -12,6 +12,7 @@ import {
   recievedAllRequests
 } from "../Actions/RequestActions";
 import User from "../Models/User";
+import CustomSnackbar, { openSnackbar } from "../Components/CustomSnackBar";
 
 export default function Home(props: any) {
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
@@ -49,6 +50,9 @@ export default function Home(props: any) {
   }, [props.page]);
   socket.on("newRequestArrived", (data: any) => {
     console.log("new request arrived");
+    if (data.department === store.getState().user.department) {
+      openSnackbar({ message: "New Request Arrived On this department" });
+    }
     store.dispatch(newRequestArrived(data));
     setIsUpdated(!isUpdated);
     console.log(store.getState());

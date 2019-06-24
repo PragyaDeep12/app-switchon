@@ -64,7 +64,8 @@ export default function RequestForm() {
       userFrom: fromUser,
       userTo: JSON.parse(toUser),
       state: "pending",
-      department: dept
+      department: dept,
+      time: new Date()
     };
     setRequestMessage(req);
     // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });

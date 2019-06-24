@@ -171,6 +171,8 @@ const checkLoginDetails = async (email, password) => {
               email: email,
               password: password
             });
+            //close connection
+            client.close();
             var user;
             if (myCursor)
               myCursor.forEach(user => {
@@ -213,6 +215,8 @@ const fetchAllRequest = () => {
             const database = client.db(dbName);
             const collection = database.collection("requests");
             var myCursor = await collection.find({});
+            //close connection
+            client.close();
             var requests = [];
             await myCursor.forEach(elem => {
               console.log(elem);
@@ -247,6 +251,8 @@ const getUserByDept = async dept => {
             const database = client.db(dbName);
             const collection = database.collection("users");
             var myCursor = await collection.find({ department: dept });
+            //close connection
+            client.close();
             var users = [];
             await myCursor.forEach(elem => {
               console.log(elem);
@@ -303,8 +309,12 @@ const addUser = user => {
           collection.insertOne(user, res => {
             if (!res) {
               resolve(request);
+              //close connection
+              client.close();
             } else {
               reject(null);
+              //close connection
+              client.close();
             }
           });
           // perform actions on the collection object
@@ -327,10 +337,15 @@ const addRequest = request => {
         collection.insertOne(request, res => {
           if (!res) {
             resolve(request);
+            //close connection
+            client.close();
           } else {
             reject(null);
+            //close connection
+            client.close();
           }
         });
+
         // perform actions on the collection object
         // client.close();
       });

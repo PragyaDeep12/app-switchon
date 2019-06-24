@@ -8,10 +8,10 @@ import store from "../Reducer/Store";
 import { NEW_REQUEST_RAISED } from "../AppConstants";
 import { newRequest, newRequestArrived } from "../Actions/RequestActions";
 import { socket } from "../Dao/SocketDAO";
-import { updateUser } from "../Actions/UserActions";
+import { updateUser, getCurrentUser } from "../Actions/UserActions";
 export default function RequestForm() {
   // var fromUser: User = store.getState().user as User;
-  const [fromUser, setFromUser] = useState();
+  const [fromUser, setFromUser] = useState<User>(getCurrentUser());
   const [toUser, setToUser] = useState();
   const [dept, setDept] = useState();
   const [deptList, setDeptList] = React.useState([
@@ -32,23 +32,22 @@ export default function RequestForm() {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      if (fromUser === undefined) {
-        var user = store.getState().user as User;
-        setFromUser(user);
-      }
-      //Automatically get data on update
-      store.subscribe(() => {
-        var user = store.getState().user as User;
-        if (user !== undefined) {
-          setFromUser(user);
-        }
-        console.log(fromUser);
-      });
+      // var user = store.getState().user as User;
+      // setFromUser(user);
+      // //Automatically get data on update
+      // store.subscribe(() => {
+      //   var user = store.getState().user as User;
+      //   console.log(user);
+      //   if (user !== undefined && user.name) {
+      //     setFromUser(user);
+      //   }
+      //   console.log(fromUser);
+      // });
 
-      socket.on("newRequestArrived", (requestArrived: any) => {
-        // this line pushes then new message to local reducer
-        store.dispatch(newRequestArrived(requestArrived));
-      });
+      // socket.on("newRequestArrived", (requestArrived: any) => {
+      //   // this line pushes then new message to local reducer
+      //   store.dispatch(newRequestArrived(requestArrived));
+      // });
       socket.on("newUserList", (data: any) => {
         console.log(data);
         setUserList(data);

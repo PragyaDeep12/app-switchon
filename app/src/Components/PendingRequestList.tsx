@@ -9,12 +9,13 @@ import RequestMessage from "../Models/RequestMessage";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import Navbar from "./Navbar";
+import { getCurrentUser } from "../Actions/UserActions";
 export default function PendingRequestList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>(getCurrentUser());
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
   useEffect(() => {
@@ -23,18 +24,30 @@ export default function PendingRequestList() {
       console.log("helo");
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
-      setUser(store.getState().user as User);
+      // setUser(store.getState().user as User);
+      store.subscribe(() => {
+        // var user = store.getState().user as User;
+        // if (user !== undefined && user.name) {
+        //   setUser(user);
+        // }
+        var requestList = store.getState().request as RequestMessage[];
+        console.log(requestList);
+        setRequestList(requestList);
+        // var request = store.getState().request as RequestMessage[];
+        // console.log(request);
+        console.log(user);
+      });
     }
     console.log(isMounted + "isMounted");
   }, []);
-  useEffect(() => {
-    setRequestList(store.getState().request);
-    store.subscribe(() => {
-      var requestList = store.getState().request;
-      console.log(requestList);
-      setRequestList(requestList);
-    });
-  }, [store.getState()]);
+  // useEffect(() => {
+  //   setRequestList(store.getState().request);
+  //   store.subscribe(() => {
+  //     var requestList = store.getState().request;
+  //     console.log(requestList);
+  //     setRequestList(requestList);
+  //   });
+  // }, [store.getState()]);
   socket.on("AllRequestsFetched", (requestList: any) => {
     console.log(requestList);
     store.dispatch(recievedAllRequests(requestList));

@@ -5,12 +5,13 @@ import store from "../Reducer/Store";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import RequestMessage from "../Models/RequestMessage";
+import { getCurrentUser } from "../Actions/UserActions";
 export default function ApprovedList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>(getCurrentUser());
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
   useEffect(() => {
@@ -19,7 +20,6 @@ export default function ApprovedList() {
       console.log("helo");
       // socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
-      setUser(store.getState().user as User);
       setRequestList(store.getState().request);
       store.subscribe(() => {
         var requestList = store.getState().request;

@@ -24,6 +24,7 @@ export default function LoginProvider(props: any) {
       console.log(data);
       localStorage.setItem("user", JSON.stringify(data));
       await setUserDetails(data);
+      window.location.href = "/requestform";
     });
     socket.on("loginFailed", async (data: any) => {
       console.log(data);
@@ -33,9 +34,10 @@ export default function LoginProvider(props: any) {
 
   const signUp = async (user: any) => {
     socket.emit("signUpUser", { user: user, password: user.password });
-    socket.on("signUpSuccessful", (data: any) => {
+    socket.on("signUpSuccessful", async (data: any) => {
       console.log(data);
-      setUserDetails(data);
+      await setUserDetails(data);
+      window.location.href = "/requestform";
     });
     socket.on("signUpFailed", (data: any) => {
       console.log(data);

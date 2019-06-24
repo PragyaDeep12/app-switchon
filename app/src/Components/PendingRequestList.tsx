@@ -8,6 +8,7 @@ import { recievedAllRequests } from "../Actions/RequestActions";
 import RequestMessage from "../Models/RequestMessage";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
+import Navbar from "./Navbar";
 export default function PendingRequestList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
@@ -23,17 +24,26 @@ export default function PendingRequestList() {
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
       setUser(store.getState().user as User);
-      setRequestList(store.getState().request);
-      store.subscribe(() => {
-        var requestList = store.getState().request;
-        console.log(requestList);
-        setRequestList(requestList);
-      });
     }
+    console.log(isMounted + "isMounted");
   }, []);
+  useEffect(() => {
+    setRequestList(store.getState().request);
+    store.subscribe(() => {
+      var requestList = store.getState().request;
+      console.log(requestList);
+      setRequestList(requestList);
+    });
+  }, [store.getState()]);
+  socket.on("AllRequestsFetched", (requestList: any) => {
+    console.log(requestList);
+    store.dispatch(recievedAllRequests(requestList));
+  });
 
   return (
-    <div className="mr-3 ml-3">
+    <div>
+      <Navbar />
+      {console.log(requestList)}
       {requestList
         ? requestList.map((request, index) => {
             if (user && request.userTo && user.email === request.userTo.email) {

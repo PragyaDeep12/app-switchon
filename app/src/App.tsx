@@ -59,9 +59,7 @@ function App(props: any) {
               <PrivateRoute
                 path="/pending"
                 exact={true}
-                component={() => {
-                  return <Home page="pending" />;
-                }}
+                component={PendingRequestList}
               />
               <PrivateRoute
                 path="/approved"

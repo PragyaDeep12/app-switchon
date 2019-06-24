@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 import RequestMessage from "../Models/RequestMessage";
+import RequestBox from "./RequestBox";
 import { socket } from "../Dao/SocketDAO";
 import PendingRequest from "./PendingRequest";
 import store from "../Reducer/Store";
@@ -18,7 +19,7 @@ export default function WaitingList() {
     if (!isMounted) {
       isMounted = true;
       console.log("helo");
-      socket.emit("fetchAllRequests", "OK");
+      // socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
       setUser(store.getState().user as User);
       setRequestList(store.getState().request);
@@ -34,13 +35,9 @@ export default function WaitingList() {
     <div>
       {requestList
         ? requestList.map((request, index) => {
-            if (
-              user &&
-              request.userTo &&
-              user.department === request.userTo.department
-            ) {
+            if (user && request.userTo) {
               console.log(request.userTo.email);
-              return <PendingRequest request={request} key={index} />;
+              return <RequestBox request={request} key={index} />;
             }
           })
         : ""}

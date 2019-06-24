@@ -30,6 +30,10 @@ export default function Home(props: any) {
   var user = store.getState().user as User;
   useEffect(() => {
     if (!isMounted) {
+      socket.on("AllRequestsFetched", (requestList: any) => {
+        console.log(requestList);
+        store.dispatch(recievedAllRequests(requestList));
+      });
       isMounted = true;
       if (user)
         // socket.emit("getAllRequest", loginInfo.user.department);
@@ -39,19 +43,21 @@ export default function Home(props: any) {
         // } else {
         //   setIsMobile(false);
         // }
-        setIsUpdated(!isUpdated);
+
+        socket.emit("fetchAllRequests", "OK");
+      setIsUpdated(!isUpdated);
     }
-  }, [store.getState()]);
+  }, [props.page]);
   socket.on("newRequestArrived", (data: any) => {
     console.log("new request arrived");
     store.dispatch(newRequestArrived(data));
     setIsUpdated(!isUpdated);
     console.log(store.getState());
   });
-  socket.on("AllRequestsFetched", (requestList: any) => {
-    console.log(requestList);
-    store.dispatch(recievedAllRequests(requestList));
-  });
+  // socket.on("AllRequestsFetched", (requestList: any) => {
+  //   console.log(requestList);
+  //   store.dispatch(recievedAllRequests(requestList));
+  // });
 
   // useEffect(() => {
   //   // console.log(isMobile);

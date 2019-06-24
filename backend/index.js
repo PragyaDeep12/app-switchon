@@ -86,6 +86,7 @@ io.on("connection", socket => {
           });
         });
     } catch (err) {
+      
       socket.emit("loginFailed", { errorMessage: "Unexpected Error Occured" });
 
       console.log(err);
@@ -234,6 +235,7 @@ const fetchAllRequest = () => {
         }
       );
     } catch (error) {
+      MongoClient.close();
       reject(null);
     }
   });
@@ -271,6 +273,7 @@ const getUserByDept = async dept => {
         }
       );
     } catch (error) {
+      MongoClient.close();
       reject(null);
     }
   });
@@ -323,6 +326,7 @@ const addUser = user => {
         }
       );
     } catch (err) {
+      MongoClient.close();
       console.log(err);
       reject(err);
     }
@@ -353,6 +357,8 @@ const addRequest = request => {
         }
       );
     } catch (err) {
+      
+      MongoClient.close();
       console.log(err);
       reject(err);
     }

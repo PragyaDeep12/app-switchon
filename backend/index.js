@@ -159,6 +159,7 @@ const checkLoginDetails = async (email, password) => {
           var user;
           if (myCursor)
             myCursor.forEach(user => {
+              console.log(user);
               resolve(user);
             });
           else reject(null);

@@ -22,6 +22,7 @@ import User from "./Models/User";
 import { isUndefined } from "util";
 import { updateUser, getCurrentUser } from "./Actions/UserActions";
 import PendingRequestList from "./Components/PendingRequestList";
+import { socket } from "./Dao/SocketDAO";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
@@ -166,6 +167,7 @@ function PrivateRoute({ Component, ...rest }: any) {
       }
       if (loginInfo.isLoggedIn === null) {
         //we will save it to store
+        initiateSocketListners();
         setLoginDetails({ isLoggedIn: true });
       }
     } else {
@@ -202,4 +204,9 @@ function PrivateRoute({ Component, ...rest }: any) {
       }}
     />
   );
+}
+function initiateSocketListners() {
+  socket.on("newRequestArrived", data => {
+    console.log(data);
+  });
 }

@@ -188,6 +188,7 @@ const checkLoginDetails = async (email, password) => {
                     uid: null,
                     userName: user.userName
                   };
+                  myCursor.close();
                   resolve(tempUser);
                 }
               });
@@ -224,6 +225,7 @@ const fetchAllRequest = () => {
             });
             // console.log(requests);
             if (collection) {
+              myCursor.close();
               resolve(requests);
             } else {
               reject(null);
@@ -260,6 +262,7 @@ const getUserByDept = async dept => {
             });
             // console.log(requests);
             if (collection) {
+              myCursor.close();
               resolve(users);
             } else {
               reject(null);
@@ -308,7 +311,7 @@ const addUser = user => {
           const collection = db.collection("users");
           collection.insertOne(user, res => {
             if (!res) {
-              resolve(request);
+              resolve(user);
               //close connection
             } else {
               reject(null);
@@ -329,22 +332,26 @@ const addUser = user => {
 const addRequest = request => {
   var promise = new Promise((resolve, reject) => {
     try {
-      client.connect(err => {
-        const db = client.db(dbName);
-        const collection = db.collection("requests");
-        collection.insertOne(request, res => {
-          if (!res) {
-            resolve(request);
-            //close connection
-          } else {
-            reject(null);
-            //close connection
-          }
-        });
+      MongoClient.connect(
+        uri,
+        { useNewUrlParser: true },
+        async (error, client) => {
+          const db = client.db(dbName);
+          const collection = db.collection("requests");
+          collection.insertOne(request, res => {
+            if (!res) {
+              resolve(request);
+              //close connection
+            } else {
+              reject(null);
+              //close connection
+            }
+          });
 
-        // perform actions on the collection object
-        //
-      });
+          // perform actions on the collection object
+          //
+        }
+      );
     } catch (err) {
       console.log(err);
       reject(err);

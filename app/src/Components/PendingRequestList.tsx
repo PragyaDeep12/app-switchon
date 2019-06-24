@@ -33,7 +33,7 @@ export default function PendingRequestList() {
   }, []);
 
   return (
-    <div>
+    <div className="mr-3 ml-3">
       {requestList
         ? requestList.map((request, index) => {
             if (user && request.userTo && user.email === request.userTo.email) {

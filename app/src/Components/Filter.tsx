@@ -12,7 +12,7 @@ export default function Filter(props) {
           setFilter(true);
         }}
       >
-        Filter
+        Filter Last 5
       </button>
       {/* {filter ? <Redirect to={props.url} /> : ""} */}
     </div>

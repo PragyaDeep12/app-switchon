@@ -65,6 +65,7 @@ export default function Home(props: any) {
   // }, [isMobile]);
   return (
     <React.Fragment>
+      <Navbar />
       {props.page === "form" ? (
         <RequestForm />
       ) : props.page === "pending" ? (

@@ -3,15 +3,7 @@ import React, { useState, useEffect } from "react";
 import { socket } from "../Dao/SocketDAO";
 import { openSnackbar } from "./CustomSnackBar";
 export default function Navbar() {
-  let isMounted = false;
-  useEffect(() => {
-    if (!isMounted) {
-      isMounted = true;
-      // socket.on("latestOnlineUsers", onlineUsers => {
-      //   // console.log(onlineUsers);
-      // });
-    }
-  }, []);
+  // let isM
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">

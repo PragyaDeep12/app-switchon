@@ -83,8 +83,8 @@ function LoginWrapper(props: any) {
       var user = localStorage.getItem("user");
       if (user) {
         // console.log(JSON.parse(user));
-        console.log(user);
-        setUserDetails(user);
+        console.log(JSON.parse(user));
+        setUserDetails(JSON.parse(user));
         setLoginDetails({ isLoggedIn: true, user: user });
       } else {
         setLoginDetails({ isLoggedIn: false, user: null });

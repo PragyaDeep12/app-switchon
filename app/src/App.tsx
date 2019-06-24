@@ -4,7 +4,6 @@ import { useContext, useEffect } from "react";
 import "./App.css";
 import "./Styles/stylesheet.css";
 import "./Styles/bootstrap.css";
-// import "./Styles/bootstrap.js";
 import LoginProvider from "./Context/LoginProvider";
 import CustomSnackbar from "./Components/CustomSnackBar";
 import { connect, Provider } from "react-redux";
@@ -18,37 +17,44 @@ import LoginContext from "./Context/LoginContext";
 import Home from "./Pages/Home";
 import LoginSignup from "./Pages/LoginSignup";
 import Loading from "./Pages/Loading";
-import { createUser } from "./Actions/UserActions";
-import { createStore, combineReducers } from "redux";
-import userReducer from "./Reducer/UserReducer";
-import requestReducer from "./Reducer/RequestsReducer";
 import store from "./Reducer/Store";
-import PendingRequestList from "./Components/PendingRequestList";
-import WaitingList from "./Components/WaitingList";
-import ApprovedList from "./Components/ApprovedList";
-import RequestForm from "./Components/RequestForm";
 import User from "./Models/User";
 import { isUndefined } from "util";
+import { updateUser } from "./Actions/UserActions";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
   // };
-  var loadScript = (src: any) => {
+  var loadScript = (src: any, integre?: any, co?: any) => {
     var tag = document.createElement("script");
-    tag.async = true;
+    // tag.async = true;
     tag.src = src;
+    // tag.integrity = integre;
+    // tag.crossOrigin = co;
     var body = document.getElementsByTagName("body")[0];
     body.appendChild(tag);
   };
   useEffect(() => {
     loadScript(
-      "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      "https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js"
+      // ,
+      // "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl",
+      // "anonymous"
     );
     loadScript(
       "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      // ,
+      // "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q",
+      // "anonymous"
     );
-    loadScript("https://code.jquery.com/jquery-3.2.1.slim.min.js");
+    loadScript(
+      "https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      // ,
+      // "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN",
+      // "anonymous"
+    );
   }, []);
+
   return (
     <div className="App" id="app-id">
       <Provider store={store}>
@@ -108,6 +114,13 @@ function LoginWrapper(props: any) {
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
   var user = store.getState().user as User;
+  var lsUser = localStorage.getItem("user");
+  if (lsUser != null) {
+    //present login details
+    setUserDetails(JSON.parse(lsUser));
+    setLoginDetails({ isLoggedIn: true });
+  } else {
+  }
   store.subscribe(() => {
     console.log("updated");
     user = store.getState().user as User;

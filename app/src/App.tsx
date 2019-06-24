@@ -112,7 +112,6 @@ function LoginWrapper(props: any) {
   }
   return <Loading />;
 }
-// }
 function PrivateRoute({ Component, ...rest }: any) {
   const {
     state: { loginInfo },

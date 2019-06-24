@@ -139,6 +139,25 @@ io.on("connection", socket => {
       console.log(err);
     }
   });
+  socket.on("updateRequest", data => {
+    try {
+      updateRequest(data.request, data.state).then(res => {
+        if (!res) {
+        } else {
+          fetchAllRequest().then(requests => {
+            if (state === "approved")
+              io.sockets.emit("approvedRequest", request);
+            else if (state === "rejected")
+              io.sockets.emit("rejectedRequest", request);
+
+            io.sockets.emit("AllRequestsFetched", requests);
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  });
   socket.on("fetchAllRequests", async data => {
     try {
       fetchAllRequest()
@@ -359,6 +378,35 @@ const addRequest = request => {
       MongoClient.close();
       console.log(err);
       reject(err);
+    }
+  });
+  return promise;
+};
+const updateRequest = (request, state) => {
+  var promise = new Promise((resolve, reject) => {
+    try {
+      MongoClient.connect(uri, { useNewUrlParser: true }, (error, client) => {
+        if (error) {
+          console.error(error);
+        } else {
+          const database = client.db(dbName);
+          const collection = database.collection("requests");
+          collection.updateOne(
+            { time: request.time },
+            { $set: { state: state } },
+            res => {
+              if (!res) {
+                resolve(request);
+              } else {
+                reject(null);
+              }
+            }
+          );
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      reject(error);
     }
   });
   return promise;

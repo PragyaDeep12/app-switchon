@@ -67,7 +67,7 @@ io.on("connection", socket => {
   });
   socket.on("loginUser", async data => {
     try {
-      await checkLoginDetails(data.email, data.password)
+      checkLoginDetails(data.email, data.password)
         .then(user => {
           if (user) {
             // let user = await getUser(data.email);
@@ -93,7 +93,7 @@ io.on("connection", socket => {
   });
   socket.on("signUpUser", async data => {
     try {
-      await addUser(data.user)
+      addUser(data.user)
         .then(user => {
           socket.emit("signUpSuccessful", data.user);
         })
@@ -112,7 +112,7 @@ io.on("connection", socket => {
   });
   socket.on("getUserListByDepartment", async data => {
     try {
-      await getUserByDept(data.department)
+      getUserByDept(data.department)
         .then(listUserByDept => {
           socket.emit("newUserList", listUserByDept);
         })
@@ -128,15 +128,20 @@ io.on("connection", socket => {
       console.log(data);
       msgArr.push(data);
       //pushing request on mongo
-      await addRequest(data);
-      socket.emit("newRequestArrived", data);
+      addRequest(data)
+        .then(() => {
+          socket.emit("newRequestArrived", data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
   });
   socket.on("fetchAllRequests", async data => {
     try {
-      await fetchAllRequest()
+      fetchAllRequest()
         .then(msgs => {
           socket.emit("AllRequestsFetched", msgs);
         })
@@ -157,30 +162,35 @@ const checkLoginDetails = async (email, password) => {
         uri,
         { useNewUrlParser: true },
         async (error, client) => {
-          const db = client.db(dbName);
-          const collection = db.collection("users");
-          var myCursor = await collection.find({
-            email: email,
-            password: password
-          });
-          var user;
-          if (myCursor)
-            myCursor.forEach(user => {
-              console.log(user);
-              //process user and make it ready for frontend because
-              // mongo user has an "_id "which cant be processed in frontend
-              if (user) {
-                var tempUser = {
-                  department: user.department,
-                  email: user.email,
-                  name: user.name,
-                  password: user.password,
-                  userName: user.userName
-                };
-                resolve(tempUser);
-              }
+          if (error) {
+            console.log(error);
+          } else {
+            const db = client.db(dbName);
+            const collection = db.collection("users");
+            var myCursor = await collection.find({
+              email: email,
+              password: password
             });
-          else reject(null);
+            var user;
+            if (myCursor)
+              myCursor.forEach(user => {
+                console.log(user);
+                //process user and make it ready for frontend because
+                // mongo user has an "_id "which cant be processed in frontend
+                if (user) {
+                  var tempUser = {
+                    department: user.department,
+                    email: user.email,
+                    name: user.name,
+                    password: user.password,
+                    uid: null,
+                    userName: user.userName
+                  };
+                  resolve(tempUser);
+                }
+              });
+            else reject(null);
+          }
         }
       );
     } catch (error) {

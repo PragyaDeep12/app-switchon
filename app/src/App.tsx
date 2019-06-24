@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent } from "react";
 import { Component } from "react";
 import { useContext, useEffect } from "react";
 import "./App.css";
@@ -47,21 +47,33 @@ function App(props: any) {
                 exact={true}
                 render={props => <LoginWrapper page="login" />}
               />
-              <PrivateRoute path="/requestform" component={RequestForm} />
+              <PrivateRoute
+                path="/requestform"
+                page="form"
+                component={() => {
+                  return <Home page="form" />;
+                }}
+              />
               <PrivateRoute
                 path="/pending"
                 exact={true}
-                component={PendingRequestList}
+                component={() => {
+                  return <Home page="pending" />;
+                }}
               />
               <PrivateRoute
                 path="/approved"
                 exact={true}
-                component={ApprovedList}
+                component={() => {
+                  return <Home page="approved" />;
+                }}
               />
               <PrivateRoute
                 path="/waitinglist"
                 exact={true}
-                component={WaitingList}
+                component={() => {
+                  return <Home page="waitinglist" />;
+                }}
               />
             </Switch>
           </Router>
@@ -76,10 +88,9 @@ function LoginWrapper(props: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  console.log("here");
-  var user = store.getState().user;
-  var localStorageUser = localStorage.getItem("user");
+  let isMounted = false;
   useEffect(() => {
+<<<<<<< HEAD
     if (user === null && localStorageUser) {
       console.log(JSON.parse(localStorageUser));
       setUserDetails(JSON.parse(localStorageUser));
@@ -87,6 +98,22 @@ function LoginWrapper(props: any) {
       if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
     }
   }, []);
+=======
+    if (!isMounted) {
+      isMounted = true;
+      var user = localStorage.getItem("user");
+      if (user) {
+        // console.log(JSON.parse(user));
+        console.log(JSON.parse(user));
+        setUserDetails(JSON.parse(user));
+        setLoginDetails({ isLoggedIn: true });
+      } else {
+        setLoginDetails({ isLoggedIn: false });
+      }
+    }
+  }, []);
+  console.log(loginInfo);
+>>>>>>> e8eed0674a9016b21e03d49d3646c40a43f64317
   if (loginInfo && loginInfo.isLoggedIn === true) {
     return <Redirect to="/requestform" />;
   }
@@ -100,6 +127,7 @@ function PrivateRoute({ Component, ...rest }: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
+<<<<<<< HEAD
   var user = store.getState().user;
   var localStorageUser = localStorage.getItem("user");
   useEffect(() => {
@@ -139,4 +167,27 @@ function PrivateRoute({ Component, ...rest }: any) {
     );
   }
   return <Loading />;
+=======
+  var user = localStorage.getItem("user");
+  if (user !== null) {
+    setUserDetails(JSON.parse(user));
+    console.log(rest);
+    // setLoginDetails({ isLoggedIn: true, user: JSON.parse(user) });
+  } else {
+    setLoginDetails({ isLoggedIn: false });
+  }
+
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        if (loginInfo.isLoggedIn === false) {
+          return <Redirect to="/login" />;
+        } else if (loginInfo.isLoggedIn === null) return <Loading />;
+
+        return <Component {...props} />;
+      }}
+    />
+  );
+>>>>>>> e8eed0674a9016b21e03d49d3646c40a43f64317
 }

@@ -146,7 +146,7 @@ function PrivateRoute({ Component, ...rest }: any) {
   }: any = useContext(LoginContext);
   var user = getCurrentUser();
   var lsUser = localStorage.getItem("user");
-  if (user !== undefined && user.name != null) {
+  if (user !== undefined && user && user.name != null) {
     //user isnt emty
     console.log(user);
   } else {

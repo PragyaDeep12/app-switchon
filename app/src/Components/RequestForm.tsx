@@ -98,7 +98,8 @@ export default function RequestForm() {
               >
                 <option> Department</option>
                 {deptList.map((item, index) => {
-                  return <option key={index}>{item}</option>;
+                  if (fromUser && fromUser.department !== item)
+                    return <option key={index}>{item}</option>;
                 })}
               </select>
             </div>
@@ -125,16 +126,7 @@ export default function RequestForm() {
             </div>
           </div>
         </div>
-        {/* <div className="input-group mb-5">
-          <textarea
-            className="form-control"
-            name=""
-            id=""
-            cols={30}
-            rows={8}
-            placeholder="Enter Your Messgae"
-          />
-        </div> */}
+
         <div className="row">
           <div className="col">
             <button className="btn btn-light">Cancel</button>
@@ -150,14 +142,6 @@ export default function RequestForm() {
           </div>
         </div>
       </form>
-
-      <button
-        onClick={() => {
-          logout();
-        }}
-      >
-        logout
-      </button>
     </div>
   );
 }

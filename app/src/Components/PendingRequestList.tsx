@@ -13,7 +13,7 @@ export default function PendingRequestList() {
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
-  var user = store.getState().user as User;
+  const [user, setUser] = useState();
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
   useEffect(() => {
@@ -22,6 +22,7 @@ export default function PendingRequestList() {
       console.log("helo");
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
+      setUser(store.getState().user as User);
       setRequestList(store.getState().request);
       store.subscribe(() => {
         var requestList = store.getState().request;
@@ -35,8 +36,10 @@ export default function PendingRequestList() {
     <div>
       {requestList
         ? requestList.map((request, index) => {
-            if (user && user.department !== request.department)
+            if (user && request.userTo && user.email === request.userTo.email) {
+              console.log(request.userTo.email);
               return <PendingRequest request={request} key={index} />;
+            }
           })
         : ""}
     </div>

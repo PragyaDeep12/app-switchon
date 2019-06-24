@@ -16,7 +16,11 @@ export default function PendingRequest(props: any) {
         className="form-control"
         aria-label="Recipient's username"
         aria-describedby="basic-addon2"
-        value={props.request.userFrom.email}
+        value={
+          props.request.userFrom.email +
+          "from" +
+          props.request.userFrom.department
+        }
       />
       <div className="input-group-append">
         <span

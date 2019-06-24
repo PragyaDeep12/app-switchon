@@ -86,7 +86,6 @@ io.on("connection", socket => {
           });
         });
     } catch (err) {
-      
       socket.emit("loginFailed", { errorMessage: "Unexpected Error Occured" });
 
       console.log(err);
@@ -351,13 +350,12 @@ const addRequest = request => {
               //close connection
             }
           });
-
+          // client.db().options("")
           // perform actions on the collection object
           //
         }
       );
     } catch (err) {
-      
       MongoClient.close();
       console.log(err);
       reject(err);

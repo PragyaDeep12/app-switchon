@@ -13,7 +13,7 @@ import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import Navbar from "./Navbar";
 import { getCurrentUser } from "../Actions/UserActions";
-export default function PendingRequestList() {
+export default function PendingRequestList(props) {
   const [requestList, setRequestList] = useState<RequestMessage[]>(
     getCurrentRequestList()
   );
@@ -29,6 +29,7 @@ export default function PendingRequestList() {
       console.log("helo");
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
+      console.log(props.location.search);
       // setUser(store.getState().user as User);
       store.subscribe(() => {
         var requestList = store.getState().request as RequestMessage[];

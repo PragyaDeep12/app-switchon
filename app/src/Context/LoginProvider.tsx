@@ -11,8 +11,7 @@ import { socket } from "../Dao/SocketDAO";
 export default function LoginProvider(props: any) {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
     isLoggedIn: null,
-    user: null,
-    uid: null
+    user: null
   });
   const setLoginDetails = (loginInfo: LoginInfo) => {
     setLoginInfo(loginInfo);
@@ -22,7 +21,7 @@ export default function LoginProvider(props: any) {
     socket.emit("loginUser", { email: email, password: password });
     socket.on("loginSuccessful", async (data: any) => {
       console.log(data);
-      localStorage.setItem("user", data);
+      localStorage.setItem("user", JSON.stringify(data));
       await setUserDetails(data);
     });
     socket.on("loginFailed", async (data: any) => {
@@ -43,17 +42,18 @@ export default function LoginProvider(props: any) {
   };
   const setUserDetails = (user: any) => {
     //fetch data from data base
-
+    // console.log(JSON.parse(user));
+    // console.log(JSON.parse(user));
     store.dispatch({
       type: UPDATE_USER,
       payload: { user: user }
     });
-    if (store.getState().user as User)
-      setLoginInfo({
-        ...loginInfo,
-        user: store.getState().user as User,
-        isLoggedIn: true
-      });
+    // if (store.getState().user as User)
+    //   setLoginInfo({
+    //     ...loginInfo,
+    //     user: store.getState().user as User,
+    //     isLoggedIn: true
+    //   });
 
     console.log(store.getState().user);
   };

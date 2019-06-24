@@ -57,7 +57,6 @@ export default function SignupComponent(props: any) {
         let user = {
           userName: userName,
           email: email,
-          uid: null,
           name: name,
           department: department,
           password: password

@@ -168,7 +168,6 @@ const checkLoginDetails = async (email, password) => {
                   email: user.email,
                   name: user.name,
                   password: user.password,
-                  uid: null,
                   userName: user.userName
                 };
                 resolve(tempUser);

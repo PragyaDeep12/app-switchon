@@ -47,11 +47,7 @@ function App(props: any) {
                 exact={true}
                 render={props => <LoginWrapper page="login" />}
               />
-              <PrivateRoute
-                path="/requestform"
-                exact={true}
-                component={RequestForm}
-              />
+              <PrivateRoute path="/requestform" component={RequestForm} />
               <PrivateRoute
                 path="/pending"
                 exact={true}
@@ -75,22 +71,10 @@ function App(props: any) {
   );
 }
 export default App;
-// const mapStateToProps = (state: any) => ({
-//   requests: state.requests,
-//   loginInfo: state.loginInfo
-// });
-// const mapActionsToProps = {
-//   onCreateUser: createUser
-// };
-// export default connect(
-//   mapStateToProps,
-//   mapActionsToProps
-// )(App);
-
 function LoginWrapper(props: any) {
   const {
     state: { loginInfo },
-    actions: { setUserDetails, logout }
+    actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
   let isMounted = false;
   useEffect(() => {
@@ -98,47 +82,43 @@ function LoginWrapper(props: any) {
       isMounted = true;
       var user = localStorage.getItem("user");
       if (user) {
+        // console.log(JSON.parse(user));
+        console.log(user);
         setUserDetails(user);
+        setLoginDetails({ isLoggedIn: true, user: user });
       } else {
-        logout();
+        setLoginDetails({ isLoggedIn: false, user: null });
       }
     }
   }, []);
-  //       isMounted = true;
-  //       // firebase.auth().onAuthStateChanged(
-  //       //   user => {
-  //       //     if (user) {
-  //       //       setLoginDetails({ isLoggedIn: true, uid: user.uid, user: null });
-  //       //     } else {
-  //       //       setLoginDetails({ isLoggedIn: false, uid: null, user: null });
-  //       //     }
-  //       //   },
-  //       //   error => {}
-  //       // );
-  //     }
-  //   }, []);
   console.log(loginInfo);
   if (loginInfo && loginInfo.isLoggedIn === true && loginInfo.user != null) {
     return <Redirect to="/requestform" />;
-  } else {
-    if (loginInfo.isLoggedIn === false) {
-      return <LoginSignup page={props.page} />;
-    }
-
-    return <Loading />;
   }
+  if (loginInfo.isLoggedIn === false) {
+    return <LoginSignup page={props.page} />;
+  }
+  return <Loading />;
 }
 // }
-function PrivateRoute({ component, ...rest }: any) {
+function PrivateRoute({ Component, ...rest }: any) {
   const {
-    state: { loginInfo }
-  } = useContext(LoginContext);
-  console.log(rest);
+    state: { loginInfo },
+    actions: { setUserDetails, setLoginDetails, logout }
+  }: any = useContext(LoginContext);
+  var user = localStorage.getItem("user");
+  if (user !== null && loginInfo.user === null) {
+    setUserDetails(JSON.parse(user));
+    // setLoginDetails({ isLoggedIn: true, user: JSON.parse(user) });
+  } else {
+    setLoginDetails({ isLoggedIn: false, user: null });
+  }
+
   return (
     <Route
       {...rest}
       render={props => {
-        if (!loginInfo.isLoggedIn) {
+        if (loginInfo.isLoggedIn === false) {
           return <Redirect to="/login" />;
         }
         return <Component {...props} />;

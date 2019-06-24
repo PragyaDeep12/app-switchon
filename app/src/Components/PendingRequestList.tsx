@@ -33,9 +33,11 @@ export default function PendingRequestList(props) {
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
       const values = queryString.parse(props.location.search);
-      var size = values["size"];
-      console.log(size);
-      setListSize(parseInt(size.toString()));
+      if (values) {
+        var size = values["size"];
+        console.log(size);
+        if (size) setListSize(parseInt(size.toString()));
+      }
       // if(values)
       // setListSize(values.size as number);
       // console.log();

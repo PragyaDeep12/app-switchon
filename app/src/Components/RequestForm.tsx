@@ -9,6 +9,7 @@ import { NEW_REQUEST_RAISED } from "../AppConstants";
 import { newRequest, newRequestArrived } from "../Actions/RequestActions";
 import { socket } from "../Dao/SocketDAO";
 import { updateUser, getCurrentUser } from "../Actions/UserActions";
+import { openSnackbar } from "./CustomSnackBar";
 export default function RequestForm() {
   // var fromUser: User = store.getState().user as User;
   const [fromUser, setFromUser] = useState<User>(getCurrentUser());
@@ -60,18 +61,25 @@ export default function RequestForm() {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    var req = {
-      userFrom: fromUser,
-      userTo: JSON.parse(toUser),
-      state: "pending",
-      department: dept,
-      time: new Date()
-    };
-    setRequestMessage(req);
-    // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });
-    if (req) {
-      store.dispatch(newRequest(req));
+    console.log(toUser);
+    if (fromUser && toUser && dept) {
+      var req = {
+        userFrom: fromUser,
+        userTo: JSON.parse(toUser),
+        state: "pending",
+        department: dept,
+        time: new Date()
+      };
+      setRequestMessage(req);
+      if (req) {
+        store.dispatch(newRequest(req));
+      }
+    } else {
+      openSnackbar({ message: "one or more fields might be empty" });
     }
+
+    // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });
+
     //same if this client want to push message then it pushes data to local reducer ,
     // 2. then reducer pushes to server socket
     //3. then server again emits an event which comes to this socket

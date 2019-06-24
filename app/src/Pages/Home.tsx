@@ -50,6 +50,7 @@ export default function Home(props: any) {
   }, [props.page]);
   socket.on("newRequestArrived", (data: any) => {
     console.log("new request arrived");
+
     if (data.department === store.getState().user.department) {
       openSnackbar({ message: "New Request Arrived On this department" });
     }

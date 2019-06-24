@@ -131,7 +131,7 @@ io.on("connection", socket => {
       //pushing request on mongo
       addRequest(data)
         .then(() => {
-          socket.emit("newRequestArrived", data);
+          io.sockets.emit("newRequestArrived", data);
         })
         .catch(err => {
           console.log(err);

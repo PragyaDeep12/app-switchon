@@ -8,6 +8,7 @@ import store from "../Reducer/Store";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import { getCurrentUser } from "../Actions/UserActions";
+import Filter from "./Filter";
 export default function WaitingList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
@@ -32,20 +33,34 @@ export default function WaitingList() {
   }, []);
 
   return (
-    <div className="mt-5 mr-5 ml-5">
-      {requestList
-        ? requestList.map((request, index) => {
-            if (
-              user &&
-              request.userTo &&
-              request.userTo.department === user.department &&
-              request.state === "pending"
-            ) {
-              console.log(request.userTo.email);
-              return <RequestBox request={request} key={index} />;
-            }
-          })
-        : ""}
+    <div>
+      <Filter url="/pending?size=4" />
+      <div className="mt-5 mr-5 ml-5">
+        <div className="row">
+          <span className="col">
+            <h5>From Email</h5>
+          </span>
+          <span className="col">
+            <h5>To Email</h5>
+          </span>
+          <span className="col">
+            <h5>Department</h5>
+          </span>
+        </div>
+        {requestList
+          ? requestList.map((request, index) => {
+              if (
+                user &&
+                request.userTo &&
+                request.userTo.department === user.department &&
+                request.state === "pending"
+              ) {
+                console.log(request.userTo.email);
+                return <RequestBox request={request} key={index} />;
+              }
+            })
+          : ""}
+      </div>
     </div>
   );
 }

@@ -75,6 +75,17 @@ export default function PendingRequestList(props) {
       <Navbar />
       <Filter url="/pending?size=4" />
       <div className="mt-5 mr-5 ml-5">
+        <div className="row">
+          <span className="col">
+            <h5>From Email</h5>
+          </span>
+          <span className="col">
+            <h5>To Email</h5>
+          </span>
+          <span className="col">
+            <h5>Department</h5>
+          </span>
+        </div>
         {console.log("listSize", listSize)}
         {requestList
           ? requestList.map((request, index) => {

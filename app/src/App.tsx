@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import "./App.css";
 import "./Styles/stylesheet.css";
 import "./Styles/bootstrap.css";
+// import "./Styles/bootstrap.js";
 import LoginProvider from "./Context/LoginProvider";
 import CustomSnackbar from "./Components/CustomSnackBar";
 import { connect, Provider } from "react-redux";
@@ -32,8 +33,24 @@ function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
   // };
+  var loadScript = (src: any) => {
+    var tag = document.createElement("script");
+    tag.async = true;
+    tag.src = src;
+    var body = document.getElementsByTagName("body")[0];
+    body.appendChild(tag);
+  };
+  useEffect(() => {
+    loadScript(
+      "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    );
+    loadScript(
+      "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    );
+    loadScript("https://code.jquery.com/jquery-3.2.1.slim.min.js");
+  }, []);
   return (
-    <div className="App">
+    <div className="App" id="app-id">
       <Provider store={store}>
         <LoginProvider>
           <CustomSnackbar />

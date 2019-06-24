@@ -80,18 +80,14 @@ function LoginWrapper(props: any) {
   var user = store.getState().user;
   var localStorageUser = localStorage.getItem("user");
   useEffect(() => {
-    // if (!isMounted) {
-    //   isMounted = true;
     if (user === null && localStorageUser) {
       console.log(JSON.parse(localStorageUser));
       setUserDetails(JSON.parse(localStorageUser));
-      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: true });
     } else {
       if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
     }
-    // }
   }, []);
-  if (loginInfo && loginInfo.isLoggedIn === true && user !== null) {
+  if (loginInfo && loginInfo.isLoggedIn === true) {
     return <Redirect to="/requestform" />;
   }
   if (loginInfo.isLoggedIn === false) {
@@ -99,7 +95,6 @@ function LoginWrapper(props: any) {
   }
   return <Loading />;
 }
-// }
 function PrivateRoute({ Component, ...rest }: any) {
   const {
     state: { loginInfo },
@@ -109,24 +104,39 @@ function PrivateRoute({ Component, ...rest }: any) {
   var localStorageUser = localStorage.getItem("user");
   useEffect(() => {
     if (user === null && localStorageUser) {
+      console.log(JSON.parse(localStorageUser));
       setUserDetails(JSON.parse(localStorageUser));
-      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: true });
     } else {
-      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
+      if (loginInfo.isLoggedIn === null || loginInfo.isLoggedIn) {
+        setLoginDetails({ isLoggedIn: false });
+        setUserDetails(null);
+      }
     }
   }, []);
-
-  return (
-    <Route
-      {...rest}
-      render={props => {
-        if (loginInfo.isLoggedIn === false) {
-          return <Redirect to="/login" />;
-        }
-        if (loginInfo.isLoggedIn === true) return <Component {...props} />;
-
-        return <Loading />;
-      }}
-    />
-  );
+  console.log(loginInfo);
+  console.log(user);
+  if (loginInfo.isLoggedIn === false && user === null) {
+    console.log("iside null avleus");
+    return (
+      <Route
+        {...rest}
+        render={props => {
+          console.log("redirect login");
+          return <LoginSignup page={"login"} />;
+        }}
+      />
+      // <Route render={props => <Redirect to="/login" />} />
+    );
+  }
+  if (loginInfo.isLoggedIn === true && user !== null) {
+    return (
+      <Route
+        {...rest}
+        render={props => {
+          return <Component {...props} />;
+        }}
+      />
+    );
+  }
+  return <Loading />;
 }

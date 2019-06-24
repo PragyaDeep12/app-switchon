@@ -24,6 +24,7 @@ export default function LoginProvider(props: any) {
       console.log(data);
       localStorage.setItem("user", JSON.stringify(data));
       await setUserDetails(data);
+      setLoginDetails({ isLoggedIn: true });
     });
     socket.on("loginFailed", async (data: any) => {
       console.log(data);

@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import firebase from "firebase";
 import { socket } from "../Dao/SocketDAO";
 import { openSnackbar } from "./CustomSnackBar";
 import { Redirect } from "react-router";
 import store from "../Reducer/Store";
 import { updateUser } from "../Actions/UserActions";
+import LoginContext from "../Context/LoginContext";
 export default function Navbar() {
   // let isM
+  const {
+    state,
+    actions: { logout }
+  } = useContext<any>(LoginContext);
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,7 +24,8 @@ export default function Navbar() {
           className="navbar-logout"
           onClick={async () => {
             //to logout the user just remove it from the store
-            store.dispatch(updateUser(null));
+            // store.dispatch(updateUser(null));
+            logout();
 
             // console.log("here");
             // socket.disconnect();

@@ -14,7 +14,7 @@ export function updateUser(user) {
   if (user === null) {
     localStorage.removeItem("user");
   } else {
-    localStorage.setItem("user", user);
+    localStorage.setItem("user", JSON.stringify(user));
   }
   return { type: UPDATE_USER, payload: { user: user } };
 }

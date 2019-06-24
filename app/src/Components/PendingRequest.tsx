@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RequestMessage from "../Models/RequestMessage";
+import EachComponent from "./EachComponent";
 export default function PendingRequest(props: any) {
   // var requestList = store.getState().request;
   const { request } = props;
@@ -18,9 +19,7 @@ export default function PendingRequest(props: any) {
           height: "auto"
         }}
       >
-        {props.request.userFrom.email +
-          "from" +
-          props.request.userFrom.department}
+        <EachComponent request={props.request} />
       </div>
       <div className="input-group-append">
         <span

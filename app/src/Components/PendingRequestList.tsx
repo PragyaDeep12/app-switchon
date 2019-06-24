@@ -8,12 +8,14 @@ import {
   recievedAllRequests,
   getCurrentRequestList
 } from "../Actions/RequestActions";
+import queryString from "query-string";
 import RequestMessage from "../Models/RequestMessage";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import Navbar from "./Navbar";
 import { getCurrentUser } from "../Actions/UserActions";
 export default function PendingRequestList(props) {
+  const [listSize, setListSize] = useState<number>(50);
   const [requestList, setRequestList] = useState<RequestMessage[]>(
     getCurrentRequestList()
   );
@@ -23,13 +25,20 @@ export default function PendingRequestList(props) {
   const [user, setUser] = useState<User>(getCurrentUser());
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
+  var count = 0;
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
       console.log("helo");
       socket.emit("fetchAllRequests", "OK");
       console.log("emitted");
-      console.log(props.location.search);
+      const values = queryString.parse(props.location.search);
+      var size = values["size"];
+      console.log(size);
+      setListSize(parseInt(size.toString()));
+      // if(values)
+      // setListSize(values.size as number);
+      // console.log();
       // setUser(store.getState().user as User);
       store.subscribe(() => {
         var requestList = store.getState().request as RequestMessage[];
@@ -58,11 +67,16 @@ export default function PendingRequestList(props) {
   return (
     <div>
       <Navbar />
-      {console.log(requestList)}
+      {console.log("listSize", listSize)}
       {requestList
         ? requestList.map((request, index) => {
-            if (user && request.userTo && user.email === request.userTo.email) {
-              console.log(request.userTo.email);
+            if (
+              user &&
+              request.userTo &&
+              user.email === request.userTo.email &&
+              count < listSize
+            ) {
+              count++;
               return <PendingRequest request={request} key={index} />;
             }
           })

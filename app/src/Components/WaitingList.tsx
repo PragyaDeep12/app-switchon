@@ -35,7 +35,12 @@ export default function WaitingList() {
     <div>
       {requestList
         ? requestList.map((request, index) => {
-            if (user && request.userTo) {
+            if (
+              user &&
+              request.userTo &&
+              request.userTo.department === user.department &&
+              request.state === "pending"
+            ) {
               console.log(request.userTo.email);
               return <RequestBox request={request} key={index} />;
             }

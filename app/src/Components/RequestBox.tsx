@@ -15,22 +15,10 @@ export default function RequestBox(props: any) {
         }}
       >
         {props.request.userFrom.email +
-          "from" +
-          props.request.userFrom.department}
-      </div>
-      <div className="input-group-append">
-        <span
-          className="btn btn-success"
-          id="basic-addon2"
-          aria-describedby="basic-addon3"
-        >
-          APPROVE
-        </span>
-      </div>
-      <div className="input-group-append">
-        <span className="input-group-text" id="basic-addon3">
-          REJECT
-        </span>
+          "||  from" +
+          props.request.userFrom.department +
+          "  ||to " +
+          props.request.userTo.email}
       </div>
     </div>
   );

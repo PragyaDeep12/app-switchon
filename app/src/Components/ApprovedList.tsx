@@ -6,11 +6,13 @@ import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import RequestMessage from "../Models/RequestMessage";
 import { getCurrentUser } from "../Actions/UserActions";
-export default function ApprovedList() {
+export default function ApprovedList(props) {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
+  // const { id } = props.location.search;
+  // console.log(id);
   const [user, setUser] = useState<User>(getCurrentUser());
   const [updated, setUpdated] = useState(false);
   let isMounted = false;

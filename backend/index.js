@@ -151,7 +151,7 @@ const checkLoginDetails = async (email, password) => {
         { useNewUrlParser: true },
         async (error, client) => {
           const db = client.db(dbName);
-          collection = db.collection("users");
+          const collection = db.collection("users");
           var myCursor = await collection.find({
             email: email,
             password: password
@@ -181,8 +181,8 @@ const fetchAllRequest = () => {
           if (error) {
             console.error(error);
           } else {
-            database = client.db(dbName);
-            collection = database.collection("requests");
+            const database = client.db(dbName);
+           const collection = database.collection("requests");
             var myCursor = await collection.find({});
             var requests = [];
             await myCursor.forEach(elem => {
@@ -215,8 +215,8 @@ const getUserByDept = async dept => {
           if (error) {
             console.error(error);
           } else {
-            database = client.db(dbName);
-            collection = database.collection("users");
+           const database = client.db(dbName);
+            const collection = database.collection("users");
             var myCursor = await collection.find({ department: dept });
             var users = [];
             await myCursor.forEach(elem => {

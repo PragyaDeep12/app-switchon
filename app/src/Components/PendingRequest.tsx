@@ -10,18 +10,18 @@ export default function PendingRequest(props: any) {
 
   return (
     // <div>{request.userTo ? request.userTo.email : ""}</div>
-    <div className="input-group mb-3">
-      <input
-        type="text"
+    <div className="input-group mb-1 ">
+      <div
         className="form-control"
-        aria-label="Recipient's username"
-        aria-describedby="basic-addon2"
-        value={
-          props.request.userFrom.email +
+        style={{
+          wordWrap: "break-word",
+          height: "auto"
+        }}
+      >
+        {props.request.userFrom.email +
           "from" +
-          props.request.userFrom.department
-        }
-      />
+          props.request.userFrom.department}
+      </div>
       <div className="input-group-append">
         <span
           className="btn btn-success"

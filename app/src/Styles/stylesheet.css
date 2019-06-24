@@ -236,3 +236,18 @@
 .vanish {
   display: none;
 }
+.filter {
+  text-align: right;
+  margin-right: 50px;
+  margin-top: 30px;
+}
+.filter > button {
+  border: none;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+}
+.filter > button:hover {
+  background-color: #adadad;
+}

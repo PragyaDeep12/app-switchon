@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { Component } from "react";
 import PendingRequest from "./PendingRequest";
+import Filter from "./Filter";
 import store from "../Reducer/Store";
 import { socket } from "../Dao/SocketDAO";
 import {
@@ -53,6 +54,9 @@ export default function PendingRequestList(props) {
     }
     console.log(isMounted + "isMounted");
   }, []);
+  useEffect(() => {
+    console.log(listSize);
+  }, [listSize]);
   // useEffect(() => {
   //   setRequestList(store.getState().request);
   //   store.subscribe(() => {
@@ -69,20 +73,23 @@ export default function PendingRequestList(props) {
   return (
     <div>
       <Navbar />
-      {console.log("listSize", listSize)}
-      {requestList
-        ? requestList.map((request, index) => {
-            if (
-              user &&
-              request.userTo &&
-              user.email === request.userTo.email &&
-              count < listSize
-            ) {
-              count++;
-              return <PendingRequest request={request} key={index} />;
-            }
-          })
-        : ""}
+      <Filter url="/pending?size=4" />
+      <div className="mt-5 mr-5 ml-5">
+        {console.log("listSize", listSize)}
+        {requestList
+          ? requestList.map((request, index) => {
+              if (
+                user &&
+                request.userTo &&
+                user.email === request.userTo.email &&
+                count < listSize
+              ) {
+                count++;
+                return <PendingRequest request={request} key={index} />;
+              }
+            })
+          : ""}
+      </div>
     </div>
   );
 }

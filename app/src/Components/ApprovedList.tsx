@@ -32,7 +32,7 @@ export default function ApprovedList(props) {
   }, []);
 
   return (
-    <div>
+    <div className="mt-5 mr-5 ml-5">
       {requestList
         ? requestList.map((request, index) => {
             if (user && user.email && request.userTo) {

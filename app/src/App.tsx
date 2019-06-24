@@ -21,6 +21,7 @@ import store from "./Reducer/Store";
 import User from "./Models/User";
 import { isUndefined } from "util";
 import { updateUser } from "./Actions/UserActions";
+import PendingRequestList from "./Components/PendingRequestList";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });

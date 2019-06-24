@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../Components/Navbar";
-import Sidebar from "../Components/Sidebar";
 import RequestForm from "../Components/RequestForm";
 import PendingRequestList from "../Components/PendingRequestList";
 import ApprovedList from "../Components/ApprovedList";

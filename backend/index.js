@@ -160,7 +160,19 @@ const checkLoginDetails = async (email, password) => {
           if (myCursor)
             myCursor.forEach(user => {
               console.log(user);
-              resolve(user);
+              //process user and make it ready for frontend because mongo user has an "_id "which cant be processed in frontend
+              // var tempUser;
+              if (user) {
+                var tempUser = {
+                  department: user.department,
+                  email: user.email,
+                  name: user.name,
+                  password: user.password,
+                  uid: null,
+                  userName: user.userName
+                };
+                resolve(tempUser);
+              }
             });
           else reject(null);
         }

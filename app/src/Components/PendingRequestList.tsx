@@ -4,14 +4,19 @@ import { Component } from "react";
 import PendingRequest from "./PendingRequest";
 import store from "../Reducer/Store";
 import { socket } from "../Dao/SocketDAO";
-import { recievedAllRequests } from "../Actions/RequestActions";
+import {
+  recievedAllRequests,
+  getCurrentRequestList
+} from "../Actions/RequestActions";
 import RequestMessage from "../Models/RequestMessage";
 import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import Navbar from "./Navbar";
 import { getCurrentUser } from "../Actions/UserActions";
 export default function PendingRequestList() {
-  const [requestList, setRequestList] = useState<RequestMessage[]>();
+  const [requestList, setRequestList] = useState<RequestMessage[]>(
+    getCurrentRequestList()
+  );
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
@@ -26,10 +31,6 @@ export default function PendingRequestList() {
       console.log("emitted");
       // setUser(store.getState().user as User);
       store.subscribe(() => {
-        // var user = store.getState().user as User;
-        // if (user !== undefined && user.name) {
-        //   setUser(user);
-        // }
         var requestList = store.getState().request as RequestMessage[];
         console.log(requestList);
         setRequestList(requestList);

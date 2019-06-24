@@ -20,7 +20,7 @@ import Loading from "./Pages/Loading";
 import store from "./Reducer/Store";
 import User from "./Models/User";
 import { isUndefined } from "util";
-import { updateUser } from "./Actions/UserActions";
+import { updateUser, getCurrentUser } from "./Actions/UserActions";
 import PendingRequestList from "./Components/PendingRequestList";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
@@ -144,24 +144,36 @@ function PrivateRoute({ Component, ...rest }: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  var user = store.getState().user as User;
+  var user = getCurrentUser();
   var lsUser = localStorage.getItem("user");
-  if (lsUser !== null) {
-    //if the user is in localStorage
-    if (loginInfo.isLoggedIn === null) {
-      //we will save it to store
-      setUserDetails(JSON.parse(lsUser));
-      setLoginDetails({ isLoggedIn: true });
-    }
+  if (user !== undefined && user.name != null) {
+    //user isnt emty
+    console.log(user);
   } else {
-    if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
+    //user is empty in store check local storage
+    console.log("user is empty in store check local storage");
+    if (lsUser !== null) {
+      //if the user is in localStorage
+      console.log("if the user is in localStorage");
+      var tempUser = JSON.parse(lsUser) as User;
+      if (tempUser as User) {
+        setUserDetails(tempUser);
+      }
+      if (loginInfo.isLoggedIn === null) {
+        //we will save it to store
+        setLoginDetails({ isLoggedIn: true });
+      }
+    } else {
+      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
+    }
   }
+
   store.subscribe(() => {
     console.log("updated");
     // console.log(store.getState().user);
-    user = store.getState().user as User;
+    // user = store.getState().user as User;
     console.log(loginInfo);
-    if (user === null) {
+    if (getCurrentUser() === null) {
       setLoginDetails({ isLoggedIn: false });
     }
   });

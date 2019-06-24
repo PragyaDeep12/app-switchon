@@ -17,3 +17,7 @@ export function newRequestArrived(request) {
 export function recievedAllRequests(allRequests) {
   return { type: ALL_REQUEST_FETCH, payload: allRequests };
 }
+
+export function getCurrentRequestList() {
+  return store.getState().request;
+}

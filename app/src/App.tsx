@@ -90,15 +90,6 @@ function LoginWrapper(props: any) {
   }: any = useContext(LoginContext);
   let isMounted = false;
   useEffect(() => {
-<<<<<<< HEAD
-    if (user === null && localStorageUser) {
-      console.log(JSON.parse(localStorageUser));
-      setUserDetails(JSON.parse(localStorageUser));
-    } else {
-      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
-    }
-  }, []);
-=======
     if (!isMounted) {
       isMounted = true;
       var user = localStorage.getItem("user");
@@ -113,7 +104,6 @@ function LoginWrapper(props: any) {
     }
   }, []);
   console.log(loginInfo);
->>>>>>> e8eed0674a9016b21e03d49d3646c40a43f64317
   if (loginInfo && loginInfo.isLoggedIn === true) {
     return <Redirect to="/requestform" />;
   }
@@ -127,47 +117,6 @@ function PrivateRoute({ Component, ...rest }: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-<<<<<<< HEAD
-  var user = store.getState().user;
-  var localStorageUser = localStorage.getItem("user");
-  useEffect(() => {
-    if (user === null && localStorageUser) {
-      console.log(JSON.parse(localStorageUser));
-      setUserDetails(JSON.parse(localStorageUser));
-    } else {
-      if (loginInfo.isLoggedIn === null || loginInfo.isLoggedIn) {
-        setLoginDetails({ isLoggedIn: false });
-        setUserDetails(null);
-      }
-    }
-  }, []);
-  console.log(loginInfo);
-  console.log(user);
-  if (loginInfo.isLoggedIn === false && user === null) {
-    console.log("iside null avleus");
-    return (
-      <Route
-        {...rest}
-        render={props => {
-          console.log("redirect login");
-          return <LoginSignup page={"login"} />;
-        }}
-      />
-      // <Route render={props => <Redirect to="/login" />} />
-    );
-  }
-  if (loginInfo.isLoggedIn === true && user !== null) {
-    return (
-      <Route
-        {...rest}
-        render={props => {
-          return <Component {...props} />;
-        }}
-      />
-    );
-  }
-  return <Loading />;
-=======
   var user = localStorage.getItem("user");
   if (user !== null) {
     setUserDetails(JSON.parse(user));
@@ -189,5 +138,4 @@ function PrivateRoute({ Component, ...rest }: any) {
       }}
     />
   );
->>>>>>> e8eed0674a9016b21e03d49d3646c40a43f64317
 }

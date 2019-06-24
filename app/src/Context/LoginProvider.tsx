@@ -34,9 +34,11 @@ export default function LoginProvider(props: any) {
 
   const signUp = async (user: any) => {
     socket.emit("signUpUser", { user: user, password: user.password });
-    socket.on("signUpSuccessful", (data: any) => {
+    socket.on("signUpSuccessful", async (data: any) => {
       console.log(data);
-      setUserDetails(data);
+      await setUserDetails(data);
+
+      setLoginDetails({ isLoggedIn: true });
     });
     socket.on("signUpFailed", (data: any) => {
       console.log(data);

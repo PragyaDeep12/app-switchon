@@ -7,11 +7,13 @@ import { socket } from "../Dao/SocketDAO";
 import { recievedAllRequests } from "../Actions/RequestActions";
 import RequestMessage from "../Models/RequestMessage";
 import LoginContext from "../Context/LoginContext";
+import User from "../Models/User";
 export default function PendingRequestList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
+  var user = store.getState().user as User;
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
   useEffect(() => {
@@ -30,39 +32,10 @@ export default function PendingRequestList() {
   }, []);
 
   return (
-    // <div>
-    //   <div className="input-group mb-3">
-    //     <input
-    //       type="text"
-    //       className="form-control"
-    //       placeholder="Recipient's username"
-    //       aria-label="Recipient's username"
-    //       aria-describedby="basic-addon2"
-    //     />
-    //     <div className="input-group-append">
-    //       <span
-    //         className="input-group-text"
-    //         id="basic-addon2"
-    //         aria-describedby="basic-addon3"
-    //       >
-    //         @example.com1
-    //       </span>
-    //     </div>
-    //     <div className="input-group-append">
-    //       <span className="input-group-text" id="basic-addon3">
-    //         @example.com
-    //       </span>
-    //     </div>
-    //   </div>
     <div>
       {requestList
         ? requestList.map((request, index) => {
-            console.log(loginInfo.user);
-
-            if (
-              loginInfo.user &&
-              loginInfo.user.department !== request.department
-            )
+            if (user && user.department !== request.department)
               return <PendingRequest request={request} key={index} />;
           })
         : ""}

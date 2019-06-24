@@ -10,8 +10,7 @@ import { socket } from "../Dao/SocketDAO";
 
 export default function LoginProvider(props: any) {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
-    isLoggedIn: null,
-    user: null
+    isLoggedIn: null
   });
   const setLoginDetails = (loginInfo: LoginInfo) => {
     setLoginInfo(loginInfo);
@@ -65,7 +64,6 @@ export default function LoginProvider(props: any) {
     if (store.getState().user as User)
       setLoginInfo({
         ...loginInfo,
-        user: store.getState().user as User,
         isLoggedIn: false
       });
   };

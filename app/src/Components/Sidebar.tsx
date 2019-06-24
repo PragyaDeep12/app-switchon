@@ -15,6 +15,7 @@ import User from "../Models/User";
 import { stat } from "fs";
 import LoginContext from "../Context/LoginContext";
 import { socket } from "../Dao/SocketDAO";
+import store from "../Reducer/Store";
 
 export default function Sidebar(props: any) {
   const {
@@ -28,10 +29,11 @@ export default function Sidebar(props: any) {
     setIsOpen(!isMobile);
   }, [isMobile]);
   let isMounted = false;
+  var user = store.getState().user as User;
   useEffect(() => {
     if (!isMounted) {
-      if (loginInfo && loginInfo.user && loginInfo.user.userName) {
-        setUserName(loginInfo.user.userName);
+      if (user && user.userName) {
+        setUserName(user.userName);
       }
     }
   }, []);

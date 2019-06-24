@@ -67,13 +67,6 @@ export default function RequestForm() {
     if (req) {
       store.dispatch(newRequest(req));
     }
-    // if (loginInfo.user && loginInfo.user.userName) {
-    //   await setRequestMessage({
-    //     ...requestMessage,
-    //     userFrom: fromUser,
-    //     state: "pending"
-    //   });
-    // }
     //same if this client want to push message then it pushes data to local reducer ,
     // 2. then reducer pushes to server socket
     //3. then server again emits an event which comes to this socket
@@ -91,13 +84,6 @@ export default function RequestForm() {
             value={
               fromUser ? (fromUser.name ? fromUser.name.toString() : "") : ""
             }
-            // value={
-            //   loginInfo.user
-            //     ? loginInfo.user.userName
-            //       ? loginInfo.user.userName.toString()
-            //       : "Pragya"
-            //     : "Pragya"
-            // }
           />
         </div>
         <div className="row">

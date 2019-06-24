@@ -12,6 +12,7 @@ import {
   newRequestArrived,
   recievedAllRequests
 } from "../Actions/RequestActions";
+import User from "../Models/User";
 
 export default function Home(props: any) {
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
@@ -26,11 +27,11 @@ export default function Home(props: any) {
   //     setIsMobile(false);
   //   }
   // });
-
+  var user = store.getState().user as User;
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      if (loginInfo.user)
+      if (user)
         // socket.emit("getAllRequest", loginInfo.user.department);
 
         // if (window.innerWidth <= 700) {

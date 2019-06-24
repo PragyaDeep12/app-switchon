@@ -85,14 +85,14 @@ function LoginWrapper(props: any) {
         // console.log(JSON.parse(user));
         console.log(JSON.parse(user));
         setUserDetails(JSON.parse(user));
-        setLoginDetails({ isLoggedIn: true, user: user });
+        setLoginDetails({ isLoggedIn: true });
       } else {
-        setLoginDetails({ isLoggedIn: false, user: null });
+        setLoginDetails({ isLoggedIn: false });
       }
     }
   }, []);
   console.log(loginInfo);
-  if (loginInfo && loginInfo.isLoggedIn === true && loginInfo.user != null) {
+  if (loginInfo && loginInfo.isLoggedIn === true) {
     return <Redirect to="/requestform" />;
   }
   if (loginInfo.isLoggedIn === false) {
@@ -107,11 +107,11 @@ function PrivateRoute({ Component, ...rest }: any) {
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
   var user = localStorage.getItem("user");
-  if (user !== null && loginInfo.user === null) {
+  if (user !== null) {
     setUserDetails(JSON.parse(user));
     // setLoginDetails({ isLoggedIn: true, user: JSON.parse(user) });
   } else {
-    setLoginDetails({ isLoggedIn: false, user: null });
+    setLoginDetails({ isLoggedIn: false });
   }
 
   return (

@@ -10,3 +10,6 @@ import LoginContext from "../Context/LoginContext";
 import store from "../Reducer/Store";
 
 export function createUser(user, state) {}
+export function updateUser(user) {
+  return { type: UPDATE_USER, payload: { user: user } };
+}

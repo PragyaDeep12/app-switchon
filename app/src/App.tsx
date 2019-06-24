@@ -26,6 +26,7 @@ import PendingRequestList from "./Components/PendingRequestList";
 import WaitingList from "./Components/WaitingList";
 import ApprovedList from "./Components/ApprovedList";
 import RequestForm from "./Components/RequestForm";
+import User from "./Models/User";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
@@ -88,52 +89,66 @@ function LoginWrapper(props: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  let isMounted = false;
-  useEffect(() => {
-    if (!isMounted) {
-      isMounted = true;
-      var user = localStorage.getItem("user");
-      if (user) {
-        // console.log(JSON.parse(user));
-        console.log(JSON.parse(user));
-        setUserDetails(JSON.parse(user));
-        setLoginDetails({ isLoggedIn: true });
-      } else {
-        setLoginDetails({ isLoggedIn: false });
-      }
+  var user = store.getState().user as User;
+  store.subscribe(() => {
+    console.log("updated");
+    user = store.getState().user as User;
+  });
+  if (user && user.name != null) {
+    //already in store because came from login
+    console.log(user);
+    if (loginInfo.isLoggedIn === true && user) {
+      return <Redirect to="/requestform" />;
     }
-  }, []);
-  console.log(loginInfo);
-  if (loginInfo && loginInfo.isLoggedIn === true) {
-    return <Redirect to="/requestform" />;
-  }
-  if (loginInfo.isLoggedIn === false) {
+    if (loginInfo.isLoggedIn === false) {
+      return <LoginSignup page={props.page} />;
+    }
+    return <Loading />;
+  } else {
+    //not in store
     return <LoginSignup page={props.page} />;
   }
-  return <Loading />;
 }
 function PrivateRoute({ Component, ...rest }: any) {
   const {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  var user = localStorage.getItem("user");
-  if (user !== null) {
-    setUserDetails(JSON.parse(user));
-    console.log(rest);
-    // setLoginDetails({ isLoggedIn: true, user: JSON.parse(user) });
+  var user = store.getState().user as User;
+  var lsUser = localStorage.getItem("user");
+  if (lsUser !== null) {
+    //if the user is in localStorage
+    if (loginInfo.isLoggedIn === null) {
+      //we will save it to store
+      setUserDetails(JSON.parse(lsUser));
+      setLoginDetails({ isLoggedIn: true });
+    }
   } else {
-    setLoginDetails({ isLoggedIn: false });
+    if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
   }
+  store.subscribe(() => {
+    console.log("updated");
+    // console.log(store.getState().user);
+    user = store.getState().user as User;
+    console.log(loginInfo);
+    if (user === null) {
+      setLoginDetails({ isLoggedIn: false });
+    }
+  });
+  console.log(loginInfo);
+  if (loginInfo.isLoggedIn === false && user === null)
+    return (
+      <Route
+        render={props => {
+          return <Redirect to="/login" />;
+        }}
+      />
+    );
 
   return (
     <Route
       {...rest}
       render={props => {
-        if (loginInfo.isLoggedIn === false) {
-          return <Redirect to="/login" />;
-        } else if (loginInfo.isLoggedIn === null) return <Loading />;
-
         return <Component {...props} />;
       }}
     />

@@ -81,6 +81,9 @@ io.on("connection", socket => {
         })
         .catch(err => {
           console.log(err);
+          socket.emit("loginFailed", {
+            errorMessage: "Incorrect user id or password"
+          });
         });
     } catch (err) {
       socket.emit("loginFailed", { errorMessage: "Unexpected Error Occured" });
@@ -90,13 +93,17 @@ io.on("connection", socket => {
   });
   socket.on("signUpUser", async data => {
     try {
-      await loginDetails.push({
-        email: data.user.email,
-        password: data.password
-      });
-      await userList.push(data.user);
-      socket.emit("signUpSuccessful", data.user);
-      await addUser(data.user);
+      await addUser(data.user)
+        .then(user => {
+          socket.emit("signUpSuccessful", data.user);
+        })
+        .catch(err => {
+          console.log(err);
+
+          socket.emit("signUpFailed", {
+            errorMessage: "Unexpected error occured"
+          });
+        });
       console.log(userList);
     } catch (err) {
       socket.emit("signUpFailed", { errorMessage: "Unexpected error occured" });
@@ -151,7 +158,7 @@ const checkLoginDetails = async (email, password) => {
         { useNewUrlParser: true },
         async (error, client) => {
           const db = client.db(dbName);
-          collection = db.collection("users");
+          const collection = db.collection("users");
           var myCursor = await collection.find({
             email: email,
             password: password
@@ -193,8 +200,8 @@ const fetchAllRequest = () => {
           if (error) {
             console.error(error);
           } else {
-            database = client.db(dbName);
-            collection = database.collection("requests");
+            const database = client.db(dbName);
+            const collection = database.collection("requests");
             var myCursor = await collection.find({});
             var requests = [];
             await myCursor.forEach(elem => {
@@ -227,8 +234,8 @@ const getUserByDept = async dept => {
           if (error) {
             console.error(error);
           } else {
-            database = client.db(dbName);
-            collection = database.collection("users");
+            const database = client.db(dbName);
+            const collection = database.collection("users");
             var myCursor = await collection.find({ department: dept });
             var users = [];
             await myCursor.forEach(elem => {

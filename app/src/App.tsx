@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import { Component } from "react";
 import { useContext, useEffect } from "react";
 import "./App.css";
@@ -76,23 +76,22 @@ function LoginWrapper(props: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  let isMounted = false;
+  console.log("here");
+  var user = store.getState().user;
+  var localStorageUser = localStorage.getItem("user");
   useEffect(() => {
-    if (!isMounted) {
-      isMounted = true;
-      var user = localStorage.getItem("user");
-      if (user) {
-        // console.log(JSON.parse(user));
-        console.log(JSON.parse(user));
-        setUserDetails(JSON.parse(user));
-        setLoginDetails({ isLoggedIn: true });
-      } else {
-        setLoginDetails({ isLoggedIn: false });
-      }
+    // if (!isMounted) {
+    //   isMounted = true;
+    if (user === null && localStorageUser) {
+      console.log(JSON.parse(localStorageUser));
+      setUserDetails(JSON.parse(localStorageUser));
+      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: true });
+    } else {
+      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
     }
+    // }
   }, []);
-  console.log(loginInfo);
-  if (loginInfo && loginInfo.isLoggedIn === true) {
+  if (loginInfo && loginInfo.isLoggedIn === true && user !== null) {
     return <Redirect to="/requestform" />;
   }
   if (loginInfo.isLoggedIn === false) {
@@ -106,13 +105,16 @@ function PrivateRoute({ Component, ...rest }: any) {
     state: { loginInfo },
     actions: { setUserDetails, setLoginDetails, logout }
   }: any = useContext(LoginContext);
-  var user = localStorage.getItem("user");
-  if (user !== null) {
-    setUserDetails(JSON.parse(user));
-    // setLoginDetails({ isLoggedIn: true, user: JSON.parse(user) });
-  } else {
-    setLoginDetails({ isLoggedIn: false });
-  }
+  var user = store.getState().user;
+  var localStorageUser = localStorage.getItem("user");
+  useEffect(() => {
+    if (user === null && localStorageUser) {
+      setUserDetails(JSON.parse(localStorageUser));
+      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: true });
+    } else {
+      if (loginInfo.isLoggedIn === null) setLoginDetails({ isLoggedIn: false });
+    }
+  }, []);
 
   return (
     <Route
@@ -121,7 +123,9 @@ function PrivateRoute({ Component, ...rest }: any) {
         if (loginInfo.isLoggedIn === false) {
           return <Redirect to="/login" />;
         }
-        return <Component {...props} />;
+        if (loginInfo.isLoggedIn === true) return <Component {...props} />;
+
+        return <Loading />;
       }}
     />
   );

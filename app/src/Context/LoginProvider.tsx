@@ -17,8 +17,10 @@ export default function LoginProvider(props: any) {
   };
   const login = async (email: string, password: string) => {
     //check from backend firebase or mongo for loginAuth
+    console.log("Loggin in");
     socket.emit("loginUser", { email: email, password: password });
     socket.on("loginSuccessful", async (data: any) => {
+      console.log("logged in");
       console.log(data);
       localStorage.setItem("user", JSON.stringify(data));
       await setUserDetails(data);
@@ -47,12 +49,6 @@ export default function LoginProvider(props: any) {
       type: UPDATE_USER,
       payload: { user: user }
     });
-    // if (store.getState().user as User)
-    //   setLoginInfo({
-    //     ...loginInfo,
-    //     user: store.getState().user as User,
-    //     isLoggedIn: true
-    //   });
 
     console.log(store.getState().user);
   };

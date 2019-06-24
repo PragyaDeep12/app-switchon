@@ -32,15 +32,19 @@ export default function RequestForm() {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-
-      var user = store.getState().user as User;
-      setFromUser(user);
-
+      if (fromUser === undefined) {
+        var user = store.getState().user as User;
+        setFromUser(user);
+      }
       //Automatically get data on update
       store.subscribe(() => {
-        console.log(store.getState().request);
+        var user = store.getState().user as User;
+        if (user !== undefined) {
+          setFromUser(user);
+        }
+        console.log(fromUser);
       });
-      // Server emits this event when some other client initiates a request
+
       socket.on("newRequestArrived", (requestArrived: any) => {
         // this line pushes then new message to local reducer
         store.dispatch(newRequestArrived(requestArrived));

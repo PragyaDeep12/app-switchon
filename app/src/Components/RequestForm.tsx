@@ -8,6 +8,7 @@ import store from "../Reducer/Store";
 import { NEW_REQUEST_RAISED } from "../AppConstants";
 import { newRequest, newRequestArrived } from "../Actions/RequestActions";
 import { socket } from "../Dao/SocketDAO";
+import { updateUser } from "../Actions/UserActions";
 export default function RequestForm() {
   // var fromUser: User = store.getState().user as User;
   const [fromUser, setFromUser] = useState();

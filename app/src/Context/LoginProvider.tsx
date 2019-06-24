@@ -18,11 +18,8 @@ export default function LoginProvider(props: any) {
   };
   const login = async (email: string, password: string) => {
     //check from backend firebase or mongo for loginAuth
-    console.log("Loggin in");
     socket.emit("loginUser", { email: email, password: password });
     socket.on("loginSuccessful", async (data: any) => {
-      console.log("logged in");
-      console.log(data);
       setUserDetails(data);
       setLoginDetails({ isLoggedIn: true });
     });
@@ -35,9 +32,7 @@ export default function LoginProvider(props: any) {
   const signUp = async (user: any) => {
     socket.emit("signUpUser", { user: user, password: user.password });
     socket.on("signUpSuccessful", async (data: any) => {
-      console.log(data);
-      await setUserDetails(data);
-
+      setUserDetails(data);
       setLoginDetails({ isLoggedIn: true });
     });
     socket.on("signUpFailed", (data: any) => {

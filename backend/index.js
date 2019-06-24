@@ -46,7 +46,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 // client.connect(err => {
 //   const collection = client.db("test").collection("devices");
 //   // perform actions on the collection object
-//   client.close();
+//
 // });
 
 io.on("connection", socket => {
@@ -172,7 +172,7 @@ const checkLoginDetails = async (email, password) => {
               password: password
             });
             //close connection
-            client.close();
+
             var user;
             if (myCursor)
               myCursor.forEach(user => {
@@ -216,7 +216,7 @@ const fetchAllRequest = () => {
             const collection = database.collection("requests");
             var myCursor = await collection.find({});
             //close connection
-            client.close();
+
             var requests = [];
             await myCursor.forEach(elem => {
               console.log(elem);
@@ -252,7 +252,7 @@ const getUserByDept = async dept => {
             const collection = database.collection("users");
             var myCursor = await collection.find({ department: dept });
             //close connection
-            client.close();
+
             var users = [];
             await myCursor.forEach(elem => {
               console.log(elem);
@@ -310,15 +310,13 @@ const addUser = user => {
             if (!res) {
               resolve(request);
               //close connection
-              client.close();
             } else {
               reject(null);
               //close connection
-              client.close();
             }
           });
           // perform actions on the collection object
-          // client.close();
+          //
         }
       );
     } catch (err) {
@@ -338,16 +336,14 @@ const addRequest = request => {
           if (!res) {
             resolve(request);
             //close connection
-            client.close();
           } else {
             reject(null);
             //close connection
-            client.close();
           }
         });
 
         // perform actions on the collection object
-        // client.close();
+        //
       });
     } catch (err) {
       console.log(err);

@@ -27,6 +27,7 @@ import WaitingList from "./Components/WaitingList";
 import ApprovedList from "./Components/ApprovedList";
 import RequestForm from "./Components/RequestForm";
 import User from "./Models/User";
+import { isUndefined } from "util";
 function App(props: any) {
   // const onCreateUser = (e: any) => {
   //   props.onCreateUser({ user: { userName: e.target.value } });
@@ -135,8 +136,10 @@ function PrivateRoute({ Component, ...rest }: any) {
       setLoginDetails({ isLoggedIn: false });
     }
   });
-  console.log(loginInfo);
-  if (loginInfo.isLoggedIn === false && user === null)
+  if (
+    loginInfo.isLoggedIn === false &&
+    (user === null || user.name === undefined)
+  )
     return (
       <Route
         render={props => {

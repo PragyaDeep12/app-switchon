@@ -12,11 +12,11 @@ export default function ApprovedList(props) {
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
-  // const { id } = props.location.search;
-  // console.log(id);
+  const [listSize, setListSize] = useState<number>(50);
   const [user, setUser] = useState<User>(getCurrentUser());
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
+  var count = 0;
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
@@ -34,7 +34,12 @@ export default function ApprovedList(props) {
 
   return (
     <div>
-      <Filter url="/pending?size=4" />
+      <Filter
+        url="/pending?size=4"
+        updateListSize={e => {
+          setListSize(e);
+        }}
+      />
 
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
@@ -52,7 +57,12 @@ export default function ApprovedList(props) {
           ? requestList.map((request, index) => {
               if (user && user.email && request.userTo) {
                 console.log(request.userTo.email);
-                return <RequestBox request={request} key={index} />;
+                count++;
+                return count <= listSize ? (
+                  <RequestBox request={request} key={index} />
+                ) : (
+                  ""
+                );
               }
             })
           : ""}

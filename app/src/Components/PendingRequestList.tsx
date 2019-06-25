@@ -73,7 +73,12 @@ export default function PendingRequestList(props) {
   return (
     <div>
       <Navbar />
-      <Filter url="/pending?size=4" />
+      <Filter
+        url="/pending?size=4"
+        updateListSize={e => {
+          setListSize(e);
+        }}
+      />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">
@@ -92,11 +97,14 @@ export default function PendingRequestList(props) {
               if (
                 user &&
                 request.userTo &&
-                user.email === request.userTo.email &&
-                count < listSize
+                user.email === request.userTo.email
               ) {
                 count++;
-                return <PendingRequest request={request} key={index} />;
+                return count <= listSize ? (
+                  <PendingRequest request={request} key={index} />
+                ) : (
+                  ""
+                );
               }
             })
           : ""}

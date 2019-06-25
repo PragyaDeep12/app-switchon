@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, NavLink } from "react-router-dom";
 
 export default function Filter(props) {
   const url: any = { props };
@@ -9,7 +9,7 @@ export default function Filter(props) {
     <div className="filter">
       <button
         onClick={() => {
-          setFilter(true);
+          props.updateListSize(5);
         }}
       >
         Filter Last 5

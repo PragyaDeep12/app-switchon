@@ -5,7 +5,7 @@ import "./App.css";
 import "./Styles/stylesheet.css";
 import "./Styles/bootstrap.css";
 import LoginProvider from "./Context/LoginProvider";
-import CustomSnackbar from "./Components/CustomSnackBar";
+import CustomSnackbar, { openSnackbar } from "./Components/CustomSnackBar";
 import { connect, Provider } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -56,7 +56,14 @@ function App(props: any) {
       // "anonymous"
     );
   }, []);
-
+  socket.on("approvedRequest", (data: any) => {
+    console.log(data);
+    openSnackbar({ message: "request was approved" });
+  });
+  socket.on("rejectedRequest", (data: any) => {
+    console.log(data);
+    openSnackbar({ message: "request was rejected" });
+  });
   return (
     <div className="App" id="app-id">
       <Provider store={store}>

@@ -14,7 +14,10 @@ export default function WaitingList() {
   const {
     state: { loginInfo }
   } = useContext(LoginContext);
+  var count = 0;
   const [user, setUser] = useState<User>(getCurrentUser());
+  const [listSize, setListSize] = useState<number>(50);
+
   const [updated, setUpdated] = useState(false);
   let isMounted = false;
   useEffect(() => {
@@ -34,7 +37,12 @@ export default function WaitingList() {
 
   return (
     <div>
-      <Filter url="/pending?size=4" />
+      <Filter
+        url="/pending?size=4"
+        updateListSize={e => {
+          setListSize(e);
+        }}
+      />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">
@@ -55,8 +63,12 @@ export default function WaitingList() {
                 request.userTo.department === user.department &&
                 request.state === "pending"
               ) {
-                console.log(request.userTo.email);
-                return <RequestBox request={request} key={index} />;
+                count++;
+                return count <= listSize ? (
+                  <RequestBox request={request} key={index} />
+                ) : (
+                  ""
+                );
               }
             })
           : ""}

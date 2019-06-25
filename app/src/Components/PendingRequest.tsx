@@ -24,7 +24,7 @@ export default function PendingRequest(props: any) {
       </div>
       <div className="input-group-append">
         <span
-          className="btn btn-success"
+          className="btn btn-success line-height"
           id="basic-addon2"
           aria-describedby="basic-addon3"
           onClick={() => {
@@ -39,7 +39,8 @@ export default function PendingRequest(props: any) {
       </div>
       <div className="input-group-append">
         <span
-          className="input-group-text"
+          className="btn btn-light line-height"
+          style={{ verticalAlign: "center" }}
           id="basic-addon3"
           onClick={() => {
             socket.emit("updateRequest", {

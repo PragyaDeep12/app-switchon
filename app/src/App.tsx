@@ -23,47 +23,12 @@ import { isUndefined } from "util";
 import { updateUser, getCurrentUser } from "./Actions/UserActions";
 import PendingRequestList from "./Components/PendingRequestList";
 import { socket } from "./Dao/SocketDAO";
+import { newRequestArrived } from "./Actions/RequestActions";
 function App(props: any) {
-  // const onCreateUser = (e: any) => {
-  //   props.onCreateUser({ user: { userName: e.target.value } });
-  // };
-  var loadScript = (src: any, integre?: any, co?: any) => {
-    var tag = document.createElement("script");
-    // tag.async = true;
-    tag.src = src;
-    // tag.integrity = integre;
-    // tag.crossOrigin = co;
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(tag);
-  };
-  useEffect(() => {
-    loadScript(
-      "https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js"
-      // ,
-      // "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl",
-      // "anonymous"
-    );
-    loadScript(
-      "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      // ,
-      // "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q",
-      // "anonymous"
-    );
-    loadScript(
-      "https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      // ,
-      // "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN",
-      // "anonymous"
-    );
-  }, []);
-  socket.on("approvedRequest", (data: any) => {
-    console.log(data);
-    openSnackbar({ message: "request was approved" });
+  socket.on("newRequestArrived", data => {
+    store.dispatch(newRequestArrived(data));
   });
-  socket.on("rejectedRequest", (data: any) => {
-    console.log(data);
-    openSnackbar({ message: "request was rejected" });
-  });
+
   return (
     <div className="App" id="app-id">
       <Provider store={store}>
@@ -89,14 +54,18 @@ function App(props: any) {
                 }}
               />
               <PrivateRoute
-                path="/pending"
-                exact={true}
-                component={PendingRequestList}
+                path="/rejected"
+                page="rejected"
+                component={() => {
+                  return <Home page="rejected" />;
+                }}
               />
               <PrivateRoute
-                path="/pending/:id"
+                path="/pending"
                 exact={true}
-                component={PendingRequestList}
+                component={() => {
+                  return <Home page="pending" />;
+                }}
               />
               <PrivateRoute
                 path="/approved"
@@ -134,12 +103,12 @@ function LoginWrapper(props: any) {
   } else {
   }
   store.subscribe(() => {
-    console.log("updated");
+    // console.log("updated");
     user = store.getState().user as User;
   });
   if (user && user.name != null) {
     //already in store because came from login
-    console.log(user);
+    //  console.log(user);
     if (loginInfo.isLoggedIn === true && user) {
       return <Redirect to="/requestform" />;
     }
@@ -161,13 +130,13 @@ function PrivateRoute({ Component, ...rest }: any) {
   var lsUser = localStorage.getItem("user");
   if (user !== undefined && user && user.name != null) {
     //user isnt emty
-    console.log(user);
+    //   console.log(user);
   } else {
     //user is empty in store check local storage
-    console.log("user is empty in store check local storage");
+    // console.log("user is empty in store check local storage");
     if (lsUser !== null) {
       //if the user is in localStorage
-      console.log("if the user is in localStorage");
+      //   console.log("if the user is in localStorage");
       var tempUser = JSON.parse(lsUser) as User;
       if (tempUser as User) {
         setUserDetails(tempUser);
@@ -183,10 +152,10 @@ function PrivateRoute({ Component, ...rest }: any) {
   }
 
   store.subscribe(() => {
-    console.log("updated");
+    //   console.log("updated");
     // console.log(store.getState().user);
     // user = store.getState().user as User;
-    console.log(loginInfo);
+    // console.log(loginInfo);
     if (getCurrentUser() === null) {
       setLoginDetails({ isLoggedIn: false });
     }
@@ -214,6 +183,6 @@ function PrivateRoute({ Component, ...rest }: any) {
 }
 function initiateSocketListners() {
   socket.on("newRequestArrived", data => {
-    console.log(data);
+    //  console.log(data);
   });
 }

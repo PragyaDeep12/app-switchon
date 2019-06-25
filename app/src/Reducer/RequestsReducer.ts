@@ -23,14 +23,15 @@ export default function requestReducer(
       return state;
     }
     case NEW_REQUEST_ARRIVED: {
-      //instead of pushing to  array you can push to socket
-      state.push(action.payload as RequestMessage);
+      //instead of pushing to  array you can push to socket4
+      console.log("pushing messggae through new request arrived");
+      state.unshift(action.payload as RequestMessage);
       return state;
     }
 
     case ALL_REQUEST_FETCH: {
       var RequestMessages = action.payload as RequestMessage[];
-      console.log(RequestMessages);
+      //  console.log(RequestMessages);
 
       state = RequestMessages;
       return state;

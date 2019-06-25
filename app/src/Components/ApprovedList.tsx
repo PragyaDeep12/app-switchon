@@ -26,7 +26,7 @@ export default function ApprovedList(props) {
       setRequestList(store.getState().request);
       store.subscribe(() => {
         var requestList = store.getState().request;
-        console.log(requestList);
+        //console.log(requestList);
         setRequestList(requestList);
       });
     }
@@ -52,11 +52,23 @@ export default function ApprovedList(props) {
           <span className="col">
             <h5>Department</h5>
           </span>
+
+          <span className="col">
+            <h5>Message</h5>
+          </span>
+          <span className="col">
+            <h5>Time</h5>
+          </span>
         </div>
         {requestList
           ? requestList.map((request, index) => {
-              if (user && user.email && request.userTo) {
-                console.log(request.userTo.email);
+              console.log(request.state);
+              if (
+                user &&
+                user.email &&
+                request.userTo &&
+                request.state === "approved"
+              ) {
                 count++;
                 return count <= listSize ? (
                   <RequestBox request={request} key={index} />

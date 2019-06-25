@@ -16,23 +16,24 @@ export default function Navbar() {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/form">
           Request App
-        </a>
+        </Link>
 
         <div className="" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <Link className="nav-link" to="/pending">
-                Pending
-              </Link>
-            </li>
+          <ul className="navbar-nav mr-auto ">
             <li className="nav-item">
               <Link className="nav-link" to="/requestform">
                 Request
               </Link>
             </li>
-            <li className="nav-item dropdown">
+            <li className="nav-item ">
+              <Link className="nav-link" to="/pending">
+                Pending
+              </Link>
+            </li>
+
+            <li className="nav-item ">
               <Link className="nav-link" to="/waitinglist">
                 Waiting List
               </Link>
@@ -40,6 +41,12 @@ export default function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/approved">
                 Approved
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/rejected">
+                Rejected
               </Link>
             </li>
           </ul>

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import LoginContext from "../Context/LoginContext";
 import userReducer from "../Reducer/UserReducer";
 import { CREATE_USER } from "../AppConstants";
+import { openSnackbar } from "./CustomSnackBar";
 // import LoginContext from "../Contexts/LoginContext";
 //  } from "react-router-dom";
 export default function SignupComponent(props: any) {
@@ -46,7 +47,10 @@ export default function SignupComponent(props: any) {
       name == null ||
       department == null
     ) {
-      alert("one or more fields might be empty");
+      openSnackbar({
+        message: "one or more fields might be empty",
+        timeout: 3000
+      });
     } else {
       if (password !== rPassword) {
         alert("password and alert password do not match");

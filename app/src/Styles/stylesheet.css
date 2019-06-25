@@ -251,3 +251,11 @@
 .filter > button:hover {
   background-color: #adadad;
 }
+.line-height {
+  line-height: 4 !important;
+}
+@media (min-width: 0px) {
+  .mynav {
+    min-width: 1120px;
+  }
+}

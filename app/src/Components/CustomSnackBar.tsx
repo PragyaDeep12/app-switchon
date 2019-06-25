@@ -29,6 +29,7 @@ export default function CustomSnackbar() {
   return (
     <div
       className="alert alert-warning alert-dismissible fade show"
+      style={{ position: "fixed", bottom: 0, zIndex: 5, width: "100vw" }}
       role="alert"
       hidden={!snack.open}
     >

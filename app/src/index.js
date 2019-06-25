@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import userReducer from "./Reducer/UserReducer";

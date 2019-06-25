@@ -9,7 +9,7 @@ import LoginContext from "../Context/LoginContext";
 import User from "../Models/User";
 import { getCurrentUser } from "../Actions/UserActions";
 import Filter from "./Filter";
-export default function WaitingList() {
+export default function RejectList() {
   const [requestList, setRequestList] = useState<RequestMessage[]>();
   const {
     state: { loginInfo }
@@ -23,13 +23,13 @@ export default function WaitingList() {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      //  console.log("helo");
+      //console.log("helo");
       // socket.emit("fetchAllRequests", "OK");
-      //  console.log("emitted");
+      //console.log("emitted");
       setRequestList(store.getState().request);
       store.subscribe(() => {
         var requestList = store.getState().request;
-        //  console.log(requestList);
+        // console.log(requestList);
         setRequestList(requestList);
       });
     }
@@ -67,7 +67,7 @@ export default function WaitingList() {
                 user &&
                 request.userTo &&
                 request.userTo.department === user.department &&
-                request.state === "pending"
+                request.state === "rejected"
               ) {
                 count++;
                 return count <= listSize ? (

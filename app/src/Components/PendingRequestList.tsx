@@ -30,33 +30,33 @@ export default function PendingRequestList(props) {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      console.log("helo");
+      // console.log("helo");
       socket.emit("fetchAllRequests", "OK");
-      console.log("emitted");
-      const values = queryString.parse(props.location.search);
-      if (values) {
-        var size = values["size"];
-        console.log(size);
-        if (size) setListSize(parseInt(size.toString()));
-      }
+      //console.log("emitted");
+      // const values = queryString.parse(props.location.search);
+      // if (values) {
+      //   var size = values["size"];
+      //   console.log(size);
+      //   if (size) setListSize(parseInt(size.toString()));
+      // }
       // if(values)
       // setListSize(values.size as number);
       // console.log();
       // setUser(store.getState().user as User);
       store.subscribe(() => {
         var requestList = store.getState().request as RequestMessage[];
-        console.log(requestList);
+        //console.log(requestList);
         setRequestList(requestList);
         // var request = store.getState().request as RequestMessage[];
         // console.log(request);
-        console.log(user);
+        // console.log(user);
       });
     }
     console.log(isMounted + "isMounted");
   }, []);
-  useEffect(() => {
-    console.log(listSize);
-  }, [listSize]);
+  // useEffect(() => {
+  //   console.log(listSize);
+  // }, [listSize]);
   // useEffect(() => {
   //   setRequestList(store.getState().request);
   //   store.subscribe(() => {
@@ -65,20 +65,20 @@ export default function PendingRequestList(props) {
   //     setRequestList(requestList);
   //   });
   // }, [store.getState()]);
-  socket.on("AllRequestsFetched", (requestList: any) => {
-    console.log(requestList);
-    store.dispatch(recievedAllRequests(requestList));
-  });
+  // socket.on("AllRequestsFetched", (requestList: any) => {
+  //   console.log(requestList);
+  //   store.dispatch(recievedAllRequests(requestList));
+  // });
 
   return (
     <div>
-      <Navbar />
       <Filter
         url="/pending?size=4"
         updateListSize={e => {
           setListSize(e);
         }}
       />
+
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">
@@ -89,6 +89,15 @@ export default function PendingRequestList(props) {
           </span>
           <span className="col">
             <h5>Department</h5>
+          </span>{" "}
+          <span className="col">
+            <h5>Message</h5>
+          </span>{" "}
+          <span className="col">
+            <h5>Time </h5>
+          </span>{" "}
+          <span className="col">
+            <h5>Approve /Reject</h5>
           </span>
         </div>
         {console.log("listSize", listSize)}
@@ -97,7 +106,8 @@ export default function PendingRequestList(props) {
               if (
                 user &&
                 request.userTo &&
-                user.email === request.userTo.email
+                user.email === request.userTo.email &&
+                request.state === "pending"
               ) {
                 count++;
                 return count <= listSize ? (

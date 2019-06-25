@@ -1,41 +1,5 @@
-// app.js
-// 1.loginProvider->getUserDetails will fetch userDetails=->change the username in socket->
-
-// client code----------------------------------
-
-// socket.emit(join,{department:"dept1"});
-
-// server code-----------------------------------
-// socket.on(join,data=>{
-//     var dept=data.dept;
-//     socket.join(dept);//the room of the dept
-
-// })
-// socket.on("newformrequest", data=>{
-// message=data.message
-// department=data.department
-// //for realtime notification
-// io.sockets.in(department).emit("newfromreques",data)
-// //for database storage
-// save database
-// })
-
-// client code----------------------------------
-// socket.on("newMessage", data=>{
-
-// })
-//******************git url ----- https://git.heroku.com/fast-plateau-10106.git */
-//******************deployment url -----https://fast-plateau-10106.herokuapp.com/ | */
-const express = require("express")();
-var server = require("http").Server(express);
-const io = require("socket.io")(server);
-express.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "./public", "index.html"));
-  // res.sendFile("index.html", { root: path.join(__dirname, "public") });
-});
-const loginDetails = [];
-const userList = [];
-const msgArr = [];
+const io = require("socket.io")();
+const Promise = require("promise");
 const dbName = "requestApp";
 io.set("origins", "*:*");
 
@@ -43,11 +7,6 @@ const MongoClient = require("mongodb").MongoClient;
 const uri =
   "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
-// client.connect(err => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//
-// });
 
 io.on("connection", socket => {
   console.log("connected");
@@ -173,7 +132,7 @@ io.on("connection", socket => {
   });
 });
 
-server.listen(process.env.PORT || 4000);
+io.listen(process.env.PORT || 4000);
 const checkLoginDetails = async (email, password) => {
   var promise = new Promise((resolve, reject) => {
     try {
@@ -234,13 +193,13 @@ const fetchAllRequest = () => {
           } else {
             const database = client.db(dbName);
             const collection = database.collection("requests");
-            var myCursor = await collection.find({});
+            var myCursor = await collection.find({}).sort({ time: -1 });
             //close connection
 
             var requests = [];
             await myCursor.forEach(elem => {
               console.log(elem);
-              if (elem.state === "pending") requests.push(elem);
+              requests.push(elem);
             });
             // console.log(requests);
             if (collection) {

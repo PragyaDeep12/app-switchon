@@ -145,10 +145,10 @@ io.on("connection", socket => {
         if (!res) {
         } else {
           fetchAllRequest().then(requests => {
-            if (state === "approved")
-              io.sockets.emit("approvedRequest", request);
-            else if (state === "rejected")
-              io.sockets.emit("rejectedRequest", request);
+            if (data.state === "approved")
+              io.sockets.emit("approvedRequest", data.request);
+            else if (data.state === "rejected")
+              io.sockets.emit("rejectedRequest", data.request);
 
             io.sockets.emit("AllRequestsFetched", requests);
           });

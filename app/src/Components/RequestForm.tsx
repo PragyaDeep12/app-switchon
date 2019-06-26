@@ -39,11 +39,11 @@ export default function RequestForm() {
       // //Automatically get data on update
       // store.subscribe(() => {
       //   var user = store.getState().user as User;
-      //   console.log(user);
+      //   //console.log(user);
       //   if (user !== undefined && user.name) {
       //     setFromUser(user);
       //   }
-      //   console.log(fromUser);
+      //   //console.log(fromUser);
       // });
 
       // socket.on("newRequestArrived", (requestArrived: any) => {
@@ -51,7 +51,7 @@ export default function RequestForm() {
       //   store.dispatch(newRequestArrived(requestArrived));
       // });
       socket.on("newUserList", (data: any) => {
-        //  console.log(data);
+        //  //console.log(data);
         setUserList(data);
       });
     }
@@ -62,7 +62,7 @@ export default function RequestForm() {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(toUser);
+    //console.log(toUser);
     if (fromUser && toUser && dept && message) {
       var req = {
         userFrom: fromUser,
@@ -82,7 +82,7 @@ export default function RequestForm() {
       openSnackbar({ message: "one or more fields might be empty" });
     }
 
-    // console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });
+    // //console.log({ userFrom: fromUser, userTo: toUser, state: "pending" });
 
     //same if this client want to push message then it pushes data to local reducer ,
     // 2. then reducer pushes to server socket
@@ -127,7 +127,7 @@ export default function RequestForm() {
                 className="form-control"
                 onChange={e => {
                   if (e.currentTarget) setToUser(e.currentTarget.value);
-                  // console.log(requestMessage);
+                  // //console.log(requestMessage);
                 }}
                 name="userTo"
               >

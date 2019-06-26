@@ -35,10 +35,10 @@ export default function SignupComponent(props: any) {
   });
   // const [userState, dispatch] = useReducer(userReducer, []);
   // useEffect(() => {
-  //   console.log(userState);
+  //   //console.log(userState);
   // }, [userState]);
   const formSubmit = async (e: FormEvent) => {
-    console.log("here");
+    //console.log("here");
     e.preventDefault();
     if (
       userName == null ||
@@ -57,7 +57,7 @@ export default function SignupComponent(props: any) {
       } else {
         //final signup
         // props.onCreateUser(
-        console.log("here");
+        //console.log("here");
         let user = {
           userName: userName,
           email: email,
@@ -67,7 +67,7 @@ export default function SignupComponent(props: any) {
         };
 
         await signUp(user);
-        console.log();
+        //console.log();
         // );
       }
     }

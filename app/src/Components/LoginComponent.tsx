@@ -12,7 +12,7 @@ export default function LoginComponent(props: any) {
   const [password, setPassword] = useState("");
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
+    //console.log(email, password);
     await login(email, password);
   };
   return (

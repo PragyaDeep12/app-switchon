@@ -20,13 +20,13 @@ export default function ApprovedList(props) {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      console.log("helo");
+      //console.log("helo");
       // socket.emit("fetchAllRequests", "OK");
-      console.log("emitted");
+      //console.log("emitted");
       setRequestList(store.getState().request);
       store.subscribe(() => {
         var requestList = store.getState().request;
-        //console.log(requestList);
+        ////console.log(requestList);
         setRequestList(requestList);
       });
     }
@@ -71,7 +71,7 @@ export default function ApprovedList(props) {
                 request.userTo &&
                 request.state === "approved"
               ) {
-                console.log(request);
+                //console.log(request);
                 count++;
                 return count <= listSize ? (
                   <RequestBox request={request} key={index} />

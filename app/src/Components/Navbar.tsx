@@ -59,7 +59,7 @@ export default function Navbar() {
                 // store.dispatch(updateUser(null));
                 logout();
 
-                // console.log("here");
+                // //console.log("here");
                 // socket.disconnect();
                 // localStorage.removeItem("user");
                 // window.location.href = "/login";
@@ -80,7 +80,7 @@ export default function Navbar() {
             // store.dispatch(updateUser(null));
             logout();
 
-            // console.log("here");
+            // //console.log("here");
             // socket.disconnect();
             // localStorage.removeItem("user");
             // window.location.href = "/login";
@@ -105,7 +105,7 @@ export default function Navbar() {
             // store.dispatch(updateUser(null));
             logout();
 
-            // console.log("here");
+            // //console.log("here");
             // socket.disconnect();
             // localStorage.removeItem("user");
             // window.location.href = "/login";

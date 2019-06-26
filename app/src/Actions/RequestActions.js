@@ -6,7 +6,7 @@ import {
   ALL_REQUEST_FETCH
 } from "../AppConstants";
 export function newRequest(request) {
- // console.log(request);
+ // //console.log(request);
   //this statement calls requestReducer with "type"
   return { type: NEW_REQUEST_RAISED, payload: request };
 }

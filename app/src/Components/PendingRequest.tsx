@@ -7,7 +7,7 @@ export default function PendingRequest(props: any) {
   const { request } = props;
   // useEffect(() => {
   //   setRequestMessage(request);
-  //   console.log(request);
+  //   //console.log(request);
   // }, []);
 
   return (

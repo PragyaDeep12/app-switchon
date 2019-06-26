@@ -80,7 +80,13 @@ export default function Home(props: any) {
   });
   socket.on("rejectedRequest", (data: any) => {
     //console.log(data);
-    openSnackbar({ message: "request was rejected" });
+    if (store.getState().user) {
+      // alert(store.getState().user);
+      //  console.log(store.getState().user);
+      console.log(data);
+      if (user.email === data.userFrom.email)
+        openSnackbar({ message: "request was rejected" });
+    }
   });
   // socket.on("AllRequestsFetched", (requestList: any) => {
   //   console.log(requestList);

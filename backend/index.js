@@ -9,8 +9,8 @@ const MongoClient = require("mongodb").MongoClient;
 const uri =
   "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
 const MONGOOSE_URI =
-  "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/requestApp?retryWrites=true&w=majority";
-mongoose.connect(MONGOOSE_URI, { useNewUrlParser: true });
+  "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
+mongoose.connect(uri, { useNewUrlParser: true, dbName: dbName });
 const client = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 var collection;

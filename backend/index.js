@@ -1,11 +1,18 @@
 const io = require("socket.io")();
 const Promise = require("promise");
 const dbName = "requestApp";
+var mongoose = require("mongoose");
+
 io.set("origins", "*:*");
 
 const MongoClient = require("mongodb").MongoClient;
 const uri =
   "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
+const MONGOOSE_URI =
+  "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/" +
+  dbName +
+  "?retryWrites=true&w=majority";
+mongoose.connect(MONGOOSE_URI, { useNewUrlParser: true });
 const client = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 var collection;
@@ -183,35 +190,24 @@ const checkLoginDetails = async (email, password) => {
 const fetchAllRequest = () => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(
-        uri,
-        { useNewUrlParser: true },
-        async (error, client) => {
-          if (error) {
-            console.error(error);
-          } else {
-            db = client.db(dbName);
-            collection = db.collection("requests");
-            var myCursor = await collection.find({}).sort({ time: -1 });
-            //close connection
-
-            var requests = [];
-            await myCursor.forEach(elem => {
-              console.log(elem);
-              requests.push(elem);
-            });
-            // console.log(requests);
-            if (collection) {
-              myCursor.close();
-              resolve(requests);
-            } else {
-              reject(null);
-            }
-          }
+      var db = mongoose.connection;
+      db.once("open", async () => {
+        collection = db.collection("requests");
+        var myCursor = await collection.find({}).sort({ time: -1 });
+        var requests = [];
+        await myCursor.forEach(elem => {
+          console.log(elem);
+          requests.push(elem);
+        });
+        if (collection) {
+          myCursor.close();
+          resolve(requests);
+        } else {
+          reject(null);
         }
-      );
+      });
     } catch (error) {
-      MongoClient.close();
+      // MongoClient.close();
       reject(null);
     }
   });
@@ -221,35 +217,24 @@ const fetchAllRequest = () => {
 const getUserByDept = async dept => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(
-        uri,
-        { useNewUrlParser: true },
-        async (error, client) => {
-          if (error) {
-            console.error(error);
-          } else {
-            db = client.db(dbName);
-            collection = db.collection("users");
-            var myCursor = await collection.find({ department: dept });
-            //close connection
-
-            var users = [];
-            await myCursor.forEach(elem => {
-              console.log(elem);
-              users.push(elem);
-            });
-            // console.log(requests);
-            if (collection) {
-              myCursor.close();
-              resolve(users);
-            } else {
-              reject(null);
-            }
-          }
+      var db = mongoose.connection;
+      db.once("open", async () => {
+        collection = db.collection("users");
+        var myCursor = await collection.find({ department: dept });
+        var users = [];
+        await myCursor.forEach(elem => {
+          console.log(elem);
+          users.push(elem);
+        });
+        if (collection) {
+          myCursor.close();
+          resolve(users);
+        } else {
+          reject(null);
         }
-      );
+      });
     } catch (error) {
-      MongoClient.close();
+      // MongoClient.close();
       reject(null);
     }
   });
@@ -259,27 +244,19 @@ const getUserByDept = async dept => {
 const addUser = user => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(
-        uri,
-        { useNewUrlParser: true },
-        async (error, client) => {
-          db = client.db(dbName);
-          collection = db.collection("users");
-          collection.insertOne(user, res => {
-            if (!res) {
-              resolve(user);
-              //close connection
-            } else {
-              reject(null);
-              //close connection
-            }
-          });
-          // perform actions on the collection object
-          //
-        }
-      );
+      var db = mongoose.connection;
+      db.once("open", async () => {
+        collection = db.collection("users");
+        collection.insertOne(user, res => {
+          if (!res) {
+            resolve(user);
+          } else {
+            reject(null);
+          }
+        });
+      });
     } catch (err) {
-      MongoClient.close();
+      // MongoClient.close();
       console.log(err);
       reject(err);
     }
@@ -289,26 +266,18 @@ const addUser = user => {
 const addRequest = request => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(
-        uri,
-        { useNewUrlParser: true },
-        async (error, client) => {
-          db = client.db(dbName);
-          collection = db.collection("requests");
-          collection.insertOne(request, res => {
-            if (!res) {
-              resolve(request);
-              //close connection
-            } else {
-              reject(null);
-              //close connection
-            }
-          });
-          // client.db().options("")
-          // perform actions on the collection object
-          //
-        }
-      );
+      var db = mongoose.connection;
+      db.once("open", async () => {
+        collection = db.collection("requests");
+        collection.insertOne(request, res => {
+          if (!res) {
+            resolve(request);
+            //close connection
+          } else {
+            reject(null);
+          }
+        });
+      });
     } catch (err) {
       MongoClient.close();
       console.log(err);
@@ -320,24 +289,20 @@ const addRequest = request => {
 const updateRequest = (request, state) => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(uri, { useNewUrlParser: true }, (error, client) => {
-        if (error) {
-          console.error(error);
-        } else {
-          db = client.db(dbName);
-          collection = db.collection("requests");
-          collection.updateOne(
-            { time: request.time },
-            { $set: { state: state } },
-            res => {
-              if (!res) {
-                resolve(request);
-              } else {
-                reject(null);
-              }
+      var db = mongoose.connection;
+      db.once("open", async () => {
+        collection = db.collection("requests");
+        collection.updateOne(
+          { time: request.time },
+          { $set: { state: state } },
+          res => {
+            if (!res) {
+              resolve(request);
+            } else {
+              reject(null);
             }
-          );
-        }
+          }
+        );
       });
     } catch (error) {
       console.error(error);

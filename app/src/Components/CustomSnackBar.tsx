@@ -23,7 +23,7 @@ export default function CustomSnackbar() {
     });
     setTimeout(() => {
       setSnack({ ...snack, open: false });
-    }, timeout);
+    }, 3000);
   };
 
   useEffect(() => {

@@ -142,44 +142,35 @@ io.listen(process.env.PORT || 4000);
 const checkLoginDetails = async (email, password) => {
   var promise = new Promise((resolve, reject) => {
     try {
-      MongoClient.connect(
-        uri,
-        { useNewUrlParser: true },
-        async (error, client) => {
-          if (error) {
-            console.log(error);
-          } else {
-            db = client.db(dbName);
-            collection = db.collection("users");
-            var myCursor = await collection.find({
-              email: email,
-              password: password
-            });
-            //close connection
+      db.once("open", async () => {
+        collection = db.collection("users");
+        var myCursor = await collection.find({
+          email: email,
+          password: password
+        });
+        //close connection
 
-            var user;
-            if (myCursor)
-              myCursor.forEach(user => {
-                console.log(user);
-                //process user and make it ready for frontend because
-                // mongo user has an "_id "which cant be processed in frontend
-                if (user) {
-                  var tempUser = {
-                    department: user.department,
-                    email: user.email,
-                    name: user.name,
-                    password: user.password,
-                    uid: null,
-                    userName: user.userName
-                  };
-                  myCursor.close();
-                  resolve(tempUser);
-                }
-              });
-            else reject(null);
-          }
-        }
-      );
+        var user;
+        if (myCursor)
+          myCursor.forEach(user => {
+            console.log(user);
+            //process user and make it ready for frontend because
+            // mongo user has an "_id "which cant be processed in frontend
+            if (user) {
+              var tempUser = {
+                department: user.department,
+                email: user.email,
+                name: user.name,
+                password: user.password,
+                uid: null,
+                userName: user.userName
+              };
+              myCursor.close();
+              resolve(tempUser);
+            }
+          });
+        else reject(null);
+      });
     } catch (error) {
       console.error(error);
       reject(false);

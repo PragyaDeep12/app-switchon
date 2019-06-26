@@ -9,9 +9,7 @@ const MongoClient = require("mongodb").MongoClient;
 const uri =
   "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
 const MONGOOSE_URI =
-  "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/" +
-  dbName +
-  "?retryWrites=true&w=majority";
+  "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/requestApp?retryWrites=true&w=majority";
 mongoose.connect(MONGOOSE_URI, { useNewUrlParser: true });
 const client = new MongoClient(uri, { useNewUrlParser: true });
 var db;
@@ -142,6 +140,7 @@ io.listen(process.env.PORT || 4000);
 const checkLoginDetails = async (email, password) => {
   var promise = new Promise((resolve, reject) => {
     try {
+      var db = mongoose.connection;
       db.once("open", async () => {
         collection = db.collection("users");
         var myCursor = await collection.find({

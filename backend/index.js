@@ -151,6 +151,11 @@ const checkLoginDetails = async (email, password) => {
             //close connection
 
             var user;
+            console.log(await myCursor.count());
+            if ((await myCursor.count()) < 1) {
+              console.log("here");
+              reject(null);
+            }
             if (myCursor)
               myCursor.forEach(user => {
                 console.log(user);
@@ -165,7 +170,7 @@ const checkLoginDetails = async (email, password) => {
                     uid: null,
                     userName: user.userName
                   };
-                  myCursor.close();
+                  //  myCursor.close();
                   resolve(tempUser);
                 }
               });
@@ -234,6 +239,7 @@ const getUserByDept = async dept => {
             //close connection
 
             var users = [];
+
             await myCursor.forEach(elem => {
               console.log(elem);
               users.push(elem);

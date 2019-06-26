@@ -8,6 +8,7 @@ import User from "../Models/User";
 import { Redirect } from "react-router";
 import { socket } from "../Dao/SocketDAO";
 import { updateUser } from "../Actions/UserActions";
+import { openSnackbar } from "../Components/CustomSnackBar";
 
 export default function LoginProvider(props: any) {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
@@ -25,6 +26,7 @@ export default function LoginProvider(props: any) {
     });
     socket.on("loginFailed", async (data: any) => {
       console.log(data);
+      openSnackbar({ message: "Invalid UserId or Password" });
     });
   };
   const getDb = () => {};

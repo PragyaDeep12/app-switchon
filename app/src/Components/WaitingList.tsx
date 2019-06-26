@@ -43,6 +43,10 @@ export default function WaitingList() {
           setListSize(e);
         }}
       />
+      <label className="note">
+        <span>*</span> NOTE : showing the requests pending on the department
+      </label>
+      <br />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">

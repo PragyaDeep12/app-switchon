@@ -43,6 +43,10 @@ export default function RejectList() {
           setListSize(e);
         }}
       />
+      <label className="note">
+        <span>*</span> NOTE : showing the requests rejected by you
+      </label>
+      <br />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">

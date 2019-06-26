@@ -7,7 +7,8 @@ const MongoClient = require("mongodb").MongoClient;
 const uri =
   "mongodb+srv://root:1234@cluster0-ditxz.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
-
+var db;
+var collection;
 io.on("connection", socket => {
   console.log("connected");
 
@@ -63,7 +64,6 @@ io.on("connection", socket => {
             errorMessage: "Unexpected error occured"
           });
         });
-      console.log(userList);
     } catch (err) {
       socket.emit("signUpFailed", { errorMessage: "Unexpected error occured" });
       console.log(err);
@@ -85,7 +85,6 @@ io.on("connection", socket => {
   socket.on("newRequest", async data => {
     try {
       console.log(data);
-      msgArr.push(data);
       //pushing request on mongo
       addRequest(data)
         .then(() => {
@@ -143,8 +142,8 @@ const checkLoginDetails = async (email, password) => {
           if (error) {
             console.log(error);
           } else {
-            const db = client.db(dbName);
-            const collection = db.collection("users");
+            db = client.db(dbName);
+            collection = db.collection("users");
             var myCursor = await collection.find({
               email: email,
               password: password
@@ -191,8 +190,8 @@ const fetchAllRequest = () => {
           if (error) {
             console.error(error);
           } else {
-            const database = client.db(dbName);
-            const collection = database.collection("requests");
+            db = client.db(dbName);
+            collection = db.collection("requests");
             var myCursor = await collection.find({}).sort({ time: -1 });
             //close connection
 
@@ -229,8 +228,8 @@ const getUserByDept = async dept => {
           if (error) {
             console.error(error);
           } else {
-            const database = client.db(dbName);
-            const collection = database.collection("users");
+            db = client.db(dbName);
+            collection = db.collection("users");
             var myCursor = await collection.find({ department: dept });
             //close connection
 
@@ -256,30 +255,7 @@ const getUserByDept = async dept => {
   });
   return promise;
 };
-// const getUser = async email => {
-//   var promise = new Promise((resolve, reject) => {
-//     try {
-//      client.connect(err=>{
-//       const db=client.db(DATABASE_NAME);
-//       collection = database.collection("users");
-//       var myCursor = await collection.find({ email: email });
-//       var user;
-//       if (myCursor)
-//         myCursor.forEach(user => {
-//           resolve(user);
-//         });
-//       else reject(null);
-//       } )
-//     }
-//     catch (error) {
-//       console.error(error);
-//       reject(false);
-//     }
-//   });
-//   return promise;
-//   // let user = userList.find(user => user.email === email);
-//   // return user;
-// };
+
 const addUser = user => {
   var promise = new Promise((resolve, reject) => {
     try {
@@ -287,8 +263,8 @@ const addUser = user => {
         uri,
         { useNewUrlParser: true },
         async (error, client) => {
-          const db = client.db(dbName);
-          const collection = db.collection("users");
+          db = client.db(dbName);
+          collection = db.collection("users");
           collection.insertOne(user, res => {
             if (!res) {
               resolve(user);
@@ -317,8 +293,8 @@ const addRequest = request => {
         uri,
         { useNewUrlParser: true },
         async (error, client) => {
-          const db = client.db(dbName);
-          const collection = db.collection("requests");
+          db = client.db(dbName);
+          collection = db.collection("requests");
           collection.insertOne(request, res => {
             if (!res) {
               resolve(request);
@@ -348,8 +324,8 @@ const updateRequest = (request, state) => {
         if (error) {
           console.error(error);
         } else {
-          const database = client.db(dbName);
-          const collection = database.collection("requests");
+          db = client.db(dbName);
+          collection = db.collection("requests");
           collection.updateOne(
             { time: request.time },
             { $set: { state: state } },

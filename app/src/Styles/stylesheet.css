@@ -259,3 +259,11 @@
     min-width: 1120px;
   }
 }
+.note {
+  float: left;
+  padding-left: 30px;
+}
+.note > span {
+  color: red;
+  font-size: 25px;
+}

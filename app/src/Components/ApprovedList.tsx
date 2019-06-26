@@ -40,7 +40,10 @@ export default function ApprovedList(props) {
           setListSize(e);
         }}
       />
-
+      <label className="note">
+        <span>*</span> NOTE : showing the requests approved by you
+      </label>
+      <br />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">
@@ -62,13 +65,13 @@ export default function ApprovedList(props) {
         </div>
         {requestList
           ? requestList.map((request, index) => {
-              console.log(request.state);
               if (
                 user &&
                 user.email &&
                 request.userTo &&
                 request.state === "approved"
               ) {
+                console.log(request);
                 count++;
                 return count <= listSize ? (
                   <RequestBox request={request} key={index} />

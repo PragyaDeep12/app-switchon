@@ -78,7 +78,10 @@ export default function PendingRequestList(props) {
           setListSize(e);
         }}
       />
-
+      <label className="note">
+        <span>*</span> NOTE : showing the requests pending for you
+      </label>
+      <br />
       <div className="mt-5 mr-5 ml-5">
         <div className="row">
           <span className="col">

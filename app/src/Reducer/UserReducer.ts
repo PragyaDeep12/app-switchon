@@ -15,31 +15,31 @@ export default function userReducer(state: any, actions: any) {
     // case CREATE_USER:
     //   {
     //     var value = createUser(actions.user);
-    //     console.log(value);
+    //     //console.log(value);
     //     state = value;
-    //     console.log(state);
+    //     //console.log(state);
     //     return state;
     //   }
     //   break;
     case UPDATE_USER: {
       // var va = updateUser(actions.user);
-      // console.log(value);
-      // console.log(state);
+      // //console.log(value);
+      // //console.log(state);
       // return va;
       user = actions.payload.user;
-      console.log(user);
+      //console.log(user);
       return user;
       break;
     }
 
     // case LOGIN_USER: {
-    //   console.log(actions.user);
+    //   //console.log(actions.user);
     //   loginUser(actions.user.email, actions.user.password);
     //   break;
     // }
     // case LOGIN_SUCCESS: {
     //   // actions.user.
-    //   // console.log
+    //   // //console.log
     //   return { user: "Sourav" };
     //   break;
     // }

@@ -24,7 +24,7 @@ export default function LoginProvider(props: any) {
       setLoginDetails({ isLoggedIn: true });
     });
     socket.on("loginFailed", async (data: any) => {
-      console.log(data);
+      //console.log(data);
     });
   };
   const getDb = () => {};
@@ -36,7 +36,7 @@ export default function LoginProvider(props: any) {
       setLoginDetails({ isLoggedIn: true });
     });
     socket.on("signUpFailed", (data: any) => {
-      console.log(data);
+      //console.log(data);
     });
   };
   const setUserDetails = (user: any) => {

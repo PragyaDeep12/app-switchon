@@ -30,43 +30,43 @@ export default function PendingRequestList(props) {
   useEffect(() => {
     if (!isMounted) {
       isMounted = true;
-      // console.log("helo");
+      // //console.log("helo");
       socket.emit("fetchAllRequests", "OK");
-      //console.log("emitted");
+      ////console.log("emitted");
       // const values = queryString.parse(props.location.search);
       // if (values) {
       //   var size = values["size"];
-      //   console.log(size);
+      //   //console.log(size);
       //   if (size) setListSize(parseInt(size.toString()));
       // }
       // if(values)
       // setListSize(values.size as number);
-      // console.log();
+      // //console.log();
       // setUser(store.getState().user as User);
       store.subscribe(() => {
         var requestList = store.getState().request as RequestMessage[];
-        //console.log(requestList);
+        ////console.log(requestList);
         setRequestList(requestList);
         // var request = store.getState().request as RequestMessage[];
-        // console.log(request);
-        // console.log(user);
+        // //console.log(request);
+        // //console.log(user);
       });
     }
-    console.log(isMounted + "isMounted");
+    //console.log(isMounted + "isMounted");
   }, []);
   // useEffect(() => {
-  //   console.log(listSize);
+  //   //console.log(listSize);
   // }, [listSize]);
   // useEffect(() => {
   //   setRequestList(store.getState().request);
   //   store.subscribe(() => {
   //     var requestList = store.getState().request;
-  //     console.log(requestList);
+  //     //console.log(requestList);
   //     setRequestList(requestList);
   //   });
   // }, [store.getState()]);
   // socket.on("AllRequestsFetched", (requestList: any) => {
-  //   console.log(requestList);
+  //   //console.log(requestList);
   //   store.dispatch(recievedAllRequests(requestList));
   // });
 
@@ -103,7 +103,6 @@ export default function PendingRequestList(props) {
             <h5>Approve /Reject</h5>
           </span>
         </div>
-        {console.log("listSize", listSize)}
         {requestList
           ? requestList.map((request, index) => {
               if (

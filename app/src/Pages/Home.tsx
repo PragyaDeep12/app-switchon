@@ -35,14 +35,14 @@ export default function Home(props: any) {
   useEffect(() => {
     if (!isMounted) {
       socket.on("AllRequestsFetched", (requestList: any) => {
-        //  console.log(requestList);
+        //  //console.log(requestList);
         store.dispatch(recievedAllRequests(requestList));
       });
       isMounted = true;
       store.subscribe(() => {
         // var request = store.getState().request as RequestMessage[];
-        // console.log(request);
-        //   console.log(user);
+        // //console.log(request);
+        //   //console.log(user);
       });
       if (user)
         // socket.emit("getAllRequest", loginInfo.user.department);
@@ -58,43 +58,43 @@ export default function Home(props: any) {
     }
   }, [props.page]);
   socket.on("newRequestArrived", (data: any) => {
-    console.log("new request arrived");
+    //console.log("new request arrived");
 
     if (data.department === user.department) {
       openSnackbar({ message: "New Request Arrived On this department" });
     }
 
     setIsUpdated(!isUpdated);
-    console.log(store.getState());
+    //console.log(store.getState());
   });
 
   socket.on("approvedRequest", (data: any) => {
-    // console.log(data);
+    // //console.log(data);
     if (store.getState().user) {
       // alert(store.getState().user);
-      //  console.log(store.getState().user);
-      console.log(data);
+      //  //console.log(store.getState().user);
+      //console.log(data);
       if (user.email === data.userFrom.email)
         openSnackbar({ message: "request was approved" });
     }
   });
   socket.on("rejectedRequest", (data: any) => {
-    //console.log(data);
+    ////console.log(data);
     if (store.getState().user) {
       // alert(store.getState().user);
-      //  console.log(store.getState().user);
-      console.log(data);
+      //  //console.log(store.getState().user);
+      //console.log(data);
       if (user.email === data.userFrom.email)
         openSnackbar({ message: "request was rejected" });
     }
   });
   // socket.on("AllRequestsFetched", (requestList: any) => {
-  //   console.log(requestList);
+  //   //console.log(requestList);
   //   store.dispatch(recievedAllRequests(requestList));
   // });
 
   // useEffect(() => {
-  //   // console.log(isMobile);
+  //   // //console.log(isMobile);
   //   if (!isMobile) {
   //     document.getElementsByClassName(
   //       "sidenav---sidenav-toggle---1KRjR"

@@ -4,7 +4,7 @@ import { Link, Redirect, NavLink } from "react-router-dom";
 export default function Filter(props) {
   const url: any = { props };
   const [filter, setFilter] = useState(false);
-  // console.log(url);
+  // //console.log(url);
   return (
     <div className="filter">
       <button

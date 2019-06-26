@@ -3,7 +3,7 @@ import RequestMessage from "../Models/RequestMessage";
 import { format } from "date-fns";
 export default function EachComponent(props) {
   const request: RequestMessage = props.request;
-  // /console.log(request);
+  // ///console.log(request);
   return (
     <div className="row">
       <span className="col">{request.userFrom.email}</span>

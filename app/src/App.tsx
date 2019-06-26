@@ -103,12 +103,12 @@ function LoginWrapper(props: any) {
   } else {
   }
   store.subscribe(() => {
-    // console.log("updated");
+    // //console.log("updated");
     user = store.getState().user as User;
   });
   if (user && user.name != null) {
     //already in store because came from login
-    //  console.log(user);
+    //  //console.log(user);
     if (loginInfo.isLoggedIn === true && user) {
       return <Redirect to="/requestform" />;
     }
@@ -130,13 +130,13 @@ function PrivateRoute({ Component, ...rest }: any) {
   var lsUser = localStorage.getItem("user");
   if (user !== undefined && user && user.name != null) {
     //user isnt emty
-    //   console.log(user);
+    //   //console.log(user);
   } else {
     //user is empty in store check local storage
-    // console.log("user is empty in store check local storage");
+    // //console.log("user is empty in store check local storage");
     if (lsUser !== null) {
       //if the user is in localStorage
-      //   console.log("if the user is in localStorage");
+      //   //console.log("if the user is in localStorage");
       var tempUser = JSON.parse(lsUser) as User;
       if (tempUser as User) {
         setUserDetails(tempUser);
@@ -152,10 +152,10 @@ function PrivateRoute({ Component, ...rest }: any) {
   }
 
   store.subscribe(() => {
-    //   console.log("updated");
-    // console.log(store.getState().user);
+    //   //console.log("updated");
+    // //console.log(store.getState().user);
     // user = store.getState().user as User;
-    // console.log(loginInfo);
+    // //console.log(loginInfo);
     if (getCurrentUser() === null) {
       setLoginDetails({ isLoggedIn: false });
     }
@@ -183,6 +183,6 @@ function PrivateRoute({ Component, ...rest }: any) {
 }
 function initiateSocketListners() {
   socket.on("newRequestArrived", data => {
-    //  console.log(data);
+    //  //console.log(data);
   });
 }
